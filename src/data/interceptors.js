@@ -1,0 +1,38 @@
+export const interceptors = [
+  {
+    id: 'int-1',
+    name: 'Email Advisory Checker',
+    description: 'Scans outbound advisory emails for inconsistencies with current legislation, client positions, and prior advice given. Flags potential errors before sending.',
+    enabled: true,
+    checksPerformed: 142,
+    issuesDetected: 7,
+    lastTriggered: '2026-03-07',
+  },
+  {
+    id: 'int-2',
+    name: 'Filing Consistency Checker',
+    description: 'Cross-references draft CT600 filings against annual accounts, prior year returns, and iXBRL tagging to identify discrepancies before submission.',
+    enabled: true,
+    checksPerformed: 38,
+    issuesDetected: 4,
+    lastTriggered: '2026-03-06',
+  },
+  {
+    id: 'int-3',
+    name: 'Deliverable Review',
+    description: 'Checks R&D tax relief reports and claim documentation for completeness, ensuring all required narratives, financial schedules, and supporting evidence are included before client delivery.',
+    enabled: true,
+    checksPerformed: 24,
+    issuesDetected: 9,
+    lastTriggered: '2026-03-05',
+  },
+  {
+    id: 'int-4',
+    name: 'Deadline Compliance',
+    description: 'Verifies that filing submissions meet statutory deadlines and checks for any prerequisite forms (such as CNFs) that must be submitted in advance.',
+    enabled: true,
+    checksPerformed: 56,
+    issuesDetected: 3,
+    lastTriggered: '2026-03-04',
+  },
+];

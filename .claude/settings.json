@@ -1,0 +1,10 @@
+{
+  "statusLine": {
+    "type": "command",
+    "command": "node \"$(git rev-parse --show-toplevel)/.claude/statusline/ctx_monitor.cjs\"",
+    "padding": 2
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true
+  }
+}
