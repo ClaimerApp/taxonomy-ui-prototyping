@@ -30,7 +30,7 @@ export default function OnboardingShell({ steps, currentStep, children }) {
         )}
 
         {/* Content */}
-        <div>{children}</div>
+        <div className="pb-16">{children}</div>
       </div>
     </div>
   )
