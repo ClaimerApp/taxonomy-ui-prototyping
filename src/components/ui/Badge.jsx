@@ -2,9 +2,10 @@ import { cn } from '../../lib/cn'
 
 const variants = {
   opportunity: 'bg-emerald-100 text-emerald-800',
-  value: 'bg-blue-100 text-blue-800',
-  risk: 'bg-orange-100 text-orange-800',
-  critical: 'bg-red-100 text-red-800 font-semibold animate-pulse',
+  info: 'bg-blue-100 text-blue-800',
+  critical: 'bg-red-100 text-red-800 font-semibold',
+  pass: 'bg-emerald-100 text-emerald-800',
+  warning: 'bg-orange-100 text-orange-800',
   default: 'bg-warmgrey/20 text-charcoal',
 }
 

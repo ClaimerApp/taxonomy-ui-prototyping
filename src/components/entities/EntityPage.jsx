@@ -1,13 +1,36 @@
+import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { entities } from '../../data/entities'
-import { signals } from '../../data/signals'
-import { Card } from '../ui/Card'
 import { Badge } from '../ui/Badge'
-import { EntityTimeline } from './EntityTimeline'
+import { EntityTabs } from './EntityTabs'
+import { EntitySignalsTab } from './EntitySignalsTab'
+import { EntityTimelineTab } from './EntityTimelineTab'
+import { EntityFilesTab } from './EntityFilesTab'
+import { EntityCommsTab } from './EntityCommsTab'
+import { EntityDetailsTab } from './EntityDetailsTab'
+
+const FLAG_MAP = {
+  GB: '🇬🇧', IE: '🇮🇪', DE: '🇩🇪', US: '🇺🇸', FR: '🇫🇷',
+}
+
+const tabs = [
+  { key: 'signals', label: 'Signals & Checks' },
+  { key: 'timeline', label: 'Timeline' },
+  { key: 'files', label: 'Files' },
+  { key: 'communications', label: 'Communications' },
+  { key: 'details', label: 'Details' },
+]
+
+const relationshipVariant = {
+  client: 'opportunity',
+  prospect: 'default',
+  former: 'default',
+}
 
 export default function EntityPage() {
   const { id } = useParams()
   const entity = entities.find((e) => e.id === id)
+  const [activeTab, setActiveTab] = useState('signals')
 
   if (!entity) {
     return (
@@ -20,75 +43,43 @@ export default function EntityPage() {
     )
   }
 
-  const entitySignals = signals.filter((s) => s.entityId === entity.id)
   const primary = entity.contacts?.[0]
+  const flag = FLAG_MAP[entity.country] || ''
+  const isCompany = entity.type === 'company'
 
   return (
     <div className="space-y-6">
       <Link to="/app" className="text-sm text-warmgrey hover:text-charcoal transition-colors">
-        ← Back
+        ← Back to entities
       </Link>
 
       <div>
-        <h1 className="font-serif text-3xl font-bold text-nearblack">{entity.name}</h1>
+        <div className="flex items-center gap-3 flex-wrap">
+          {flag && <span className="text-2xl">{flag}</span>}
+          <h1 className="font-serif text-3xl font-bold text-nearblack">{entity.name}</h1>
+          <Badge>{entity.entityType}</Badge>
+          <Badge variant={relationshipVariant[entity.relationship]}>
+            {entity.relationship.charAt(0).toUpperCase() + entity.relationship.slice(1)}
+          </Badge>
+        </div>
         <p className="text-sm text-warmgrey mt-1">
-          {entity.companyNumber} · {entity.sector}
+          {isCompany ? entity.companyNumber : entity.utr} · {entity.sector}
         </p>
         {primary && (
-          <p className="text-sm text-charcoal/70 mt-2">
-            {primary.name} · {primary.role} · {primary.email}
+          <p className="text-sm text-charcoal/70 mt-1">
+            {primary.name} · {primary.role}
           </p>
         )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left column */}
-        <div className="lg:col-span-2 space-y-4">
-          <h2 className="font-serif text-xl font-semibold text-nearblack">Active Signals</h2>
-          {entitySignals.length === 0 && (
-            <p className="text-sm text-warmgrey">No active signals</p>
-          )}
-          {entitySignals.map((signal) => (
-            <Link key={signal.id} to={`/app/signals/${signal.id}`} className="block">
-              <Card hover className="p-4">
-                <div className="flex items-start gap-3">
-                  <Badge variant={signal.category}>{signal.category}</Badge>
-                  <div className="min-w-0">
-                    <p className="font-semibold text-nearblack">{signal.title}</p>
-                    <p className="text-sm text-charcoal/70 mt-1 line-clamp-2">{signal.summary}</p>
-                  </div>
-                </div>
-              </Card>
-            </Link>
-          ))}
-        </div>
+      <EntityTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
 
-        {/* Right column */}
-        <div className="space-y-6">
-          <Card className="p-4 space-y-3">
-            <h3 className="font-semibold text-nearblack">Company Details</h3>
-            <div className="text-sm space-y-1">
-              <p><span className="text-warmgrey">Company No:</span> {entity.companyNumber}</p>
-              <p><span className="text-warmgrey">Sector:</span> {entity.sector}</p>
-            </div>
-            {entity.contacts?.length > 0 && (
-              <div className="border-t border-warmgrey/20 pt-3 space-y-2">
-                <p className="text-xs font-medium text-warmgrey uppercase tracking-wide">Contacts</p>
-                {entity.contacts.map((c, i) => (
-                  <div key={i} className="text-sm">
-                    <p className="font-medium text-charcoal">{c.name}</p>
-                    <p className="text-warmgrey">{c.role} · {c.email}</p>
-                  </div>
-                ))}
-              </div>
-            )}
-          </Card>
-
-          <div>
-            <h3 className="font-semibold text-nearblack mb-3">Timeline</h3>
-            <EntityTimeline timeline={entity.timeline} />
-          </div>
-        </div>
+      <div>
+        {activeTab === 'signals' && <EntitySignalsTab entityId={entity.id} />}
+        {activeTab === 'timeline' && <EntityTimelineTab entity={entity} />}
+        {activeTab === 'files' && <EntityFilesTab />}
+        {activeTab === 'communications' && <EntityCommsTab />}
+        {activeTab === 'details' && <EntityDetailsTab entity={entity} />}
       </div>
     </div>
   )

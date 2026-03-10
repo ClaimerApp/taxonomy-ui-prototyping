@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Card } from '../ui/Card'
 import { Toggle } from '../ui/Toggle'
-import { Badge } from '../ui/Badge'
 
 export function SensorCard({ sensor }) {
   const [enabled, setEnabled] = useState(sensor.enabled)
@@ -17,13 +16,6 @@ export function SensorCard({ sensor }) {
         <span>{sensor.signalCount} signals generated</span>
         <span>Last triggered: {sensor.lastTriggered}</span>
       </div>
-      {sensor.entities?.length > 0 && (
-        <div className="flex flex-wrap gap-1.5">
-          {sensor.entities.map((name) => (
-            <Badge key={name} className="text-[10px]">{name}</Badge>
-          ))}
-        </div>
-      )}
     </Card>
   )
 }

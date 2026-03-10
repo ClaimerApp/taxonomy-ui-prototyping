@@ -42,7 +42,6 @@ export default function SignalDetail() {
       <div className="space-y-3">
         <div className="flex items-center gap-2">
           <Badge variant={signal.category}>{signal.category}</Badge>
-          {signal.urgency === 'critical' && <Badge variant="critical">critical</Badge>}
         </div>
 
         <h1 className="font-serif text-2xl font-bold text-nearblack">{signal.title}</h1>
@@ -81,13 +80,6 @@ export default function SignalDetail() {
       {signal.impact && (
         <Card className="bg-gold/10 border-gold/30 p-4">
           <p className="text-sm font-medium text-nearblack">{signal.impact}</p>
-        </Card>
-      )}
-
-      {signal.recommendedAction && (
-        <Card className="p-4 space-y-3">
-          <h2 className="font-serif text-lg font-semibold text-nearblack">Recommended action</h2>
-          <p className="text-sm text-charcoal/80">{signal.recommendedAction}</p>
         </Card>
       )}
 

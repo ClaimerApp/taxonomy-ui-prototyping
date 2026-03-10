@@ -1,0 +1,1 @@
+When developing the frontend, always use docs/STYLE_GUIDE.md.

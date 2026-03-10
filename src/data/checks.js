@@ -1,0 +1,66 @@
+export const checks = [
+  {
+    id: 'chk-file-1',
+    fileName: 'R&D_Tax_Claim_FY2025.pdf',
+    fileType: 'pdf',
+    entityId: 'ent-1',
+    reviewedAt: '2026-03-03T09:14:00Z',
+    checks: [
+      { id: 'chk-1a', name: 'Client Name Verification', result: 'pass', summary: 'Client name matches registered entity on Companies House.' },
+      { id: 'chk-1b', name: 'Tax Computation Accuracy', result: 'critical', summary: 'R&D expenditure total is £68k higher than supporting schedule.', evidence: 'Claim states £412,000; schedule totals £344,200.', regulatoryRef: 'CTA 2009 s1044', suggestedFix: 'Reconcile expenditure schedule to claim total before submission.' },
+      { id: 'chk-1c', name: 'Supporting Evidence Attached', result: 'pass', summary: 'Technical narrative and cost schedules are attached.' },
+      { id: 'chk-1d', name: 'Confidentiality Marking', result: 'pass', summary: 'Document marked CONFIDENTIAL on all pages.' },
+    ],
+  },
+  {
+    id: 'chk-file-2',
+    fileName: 'Annual_Accounts_Draft.xlsx',
+    fileType: 'xlsx',
+    entityId: 'ent-2',
+    reviewedAt: '2026-03-05T14:32:00Z',
+    checks: [
+      { id: 'chk-2a', name: 'Client Name Verification', result: 'pass', summary: 'Entity name and registration number confirmed.' },
+      { id: 'chk-2b', name: 'Financial Accuracy Check', result: 'warning', summary: 'Balance sheet does not balance — £1,200 discrepancy in current liabilities.', evidence: 'Total assets £2,415,800; total liabilities + equity £2,414,600.', suggestedFix: 'Review accruals schedule for missing entries.' },
+      { id: 'chk-2c', name: 'Regulatory Reference Validation', result: 'pass', summary: 'FRS 102 references are correct and up to date.' },
+      { id: 'chk-2d', name: 'Data Protection Compliance', result: 'pass', summary: 'No personal data exposed outside permitted fields.' },
+    ],
+  },
+  {
+    id: 'chk-file-3',
+    fileName: 'Client_Engagement_Letter.pdf',
+    fileType: 'pdf',
+    entityId: 'ent-3',
+    reviewedAt: '2026-03-06T11:05:00Z',
+    checks: [
+      { id: 'chk-3a', name: 'Client Name Verification', result: 'pass', summary: 'Client name and registered address verified.' },
+      { id: 'chk-3b', name: 'Anti-Money Laundering Flag', result: 'warning', summary: 'AML check expired — last verification was 14 months ago.', regulatoryRef: 'MLR 2017 reg 28(11)', suggestedFix: 'Request updated ID and proof of address before engagement.' },
+      { id: 'chk-3c', name: 'Confidentiality Marking', result: 'pass', summary: 'Appropriate confidentiality footer present.' },
+    ],
+  },
+  {
+    id: 'chk-file-4',
+    fileName: 'Corporation Tax Return CT600',
+    fileType: 'filing',
+    entityId: 'ent-4',
+    reviewedAt: '2026-03-07T16:48:00Z',
+    checks: [
+      { id: 'chk-4a', name: 'Client Name Verification', result: 'pass', summary: 'UTR and company name match HMRC records.' },
+      { id: 'chk-4b', name: 'Tax Computation Accuracy', result: 'pass', summary: 'Tax liability agrees to computation within £1 rounding.' },
+      { id: 'chk-4c', name: 'Regulatory Reference Validation', result: 'pass', summary: 'All statutory references validated against CTA 2010.' },
+      { id: 'chk-4d', name: 'Supporting Evidence Attached', result: 'pass', summary: 'Computations, accounts, and capital allowances schedule attached.' },
+      { id: 'chk-4e', name: 'Data Protection Compliance', result: 'pass', summary: 'No unnecessary personal data included in filing.' },
+    ],
+  },
+  {
+    id: 'chk-file-5',
+    fileName: 'R&D Technical Narrative FY2025',
+    fileType: 'pdf',
+    entityId: 'ent-5',
+    reviewedAt: '2026-03-08T10:22:00Z',
+    checks: [
+      { id: 'chk-5a', name: 'Client Name Verification', result: 'pass', summary: 'Client name and company number confirmed against engagement record.' },
+      { id: 'chk-5b', name: 'Technical Narrative Completeness', result: 'pass', summary: 'All qualifying project descriptions include baseline, advance sought, and uncertainty.' },
+      { id: 'chk-5c', name: 'Confidentiality Marking', result: 'pass', summary: 'Document marked CONFIDENTIAL on all pages.' },
+    ],
+  },
+]

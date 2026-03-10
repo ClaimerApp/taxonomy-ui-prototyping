@@ -45,7 +45,7 @@ export function SignalRow({ signal }) {
           <p
             className={cn(
               'text-sm font-medium mt-2',
-              signal.category === 'opportunity' ? 'text-emerald-700' : 'text-orange-700',
+              signal.category === 'opportunity' ? 'text-emerald-700' : signal.category === 'critical' ? 'text-red-700' : 'text-orange-700',
             )}
           >
             {signal.impact}

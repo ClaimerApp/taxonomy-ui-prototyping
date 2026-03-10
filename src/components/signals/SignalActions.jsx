@@ -7,6 +7,13 @@ export function SignalActions({ signal }) {
     <div className="space-y-4">
       <h2 className="font-serif text-lg font-semibold text-nearblack">Actions</h2>
 
+      {signal.recommendedAction && (
+        <div className="space-y-3">
+          <p className="text-xs font-semibold uppercase tracking-wider text-darkgold">Recommended</p>
+          <p className="text-sm text-charcoal/80">{signal.recommendedAction}</p>
+        </div>
+      )}
+
       <div className="flex flex-wrap gap-2">
         <Button variant="primary" size="sm" onClick={noop}>
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -31,19 +38,6 @@ export function SignalActions({ signal }) {
         </Button>
       </div>
 
-      <div className="flex items-center gap-2 text-sm">
-        <span className="text-charcoal/60">Status:</span>
-        <select
-          className="bg-warmgrey/10 text-charcoal rounded-lg px-2 py-1 text-sm border border-warmgrey/20"
-          defaultValue={signal.status}
-          onChange={noop}
-        >
-          <option value="new">New</option>
-          <option value="viewed">Viewed</option>
-          <option value="in_progress">In Progress</option>
-          <option value="resolved">Resolved</option>
-        </select>
-      </div>
     </div>
   )
 }
