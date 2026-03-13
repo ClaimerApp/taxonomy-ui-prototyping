@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { NavLink, useLocation } from 'react-router-dom'
 import { Card } from '../ui/Card'
 import { Toggle } from '../ui/Toggle'
-import { sensors } from '../../data/sensors'
+import { sensors, sources } from '../../data/sensors'
 import { SensorCard } from '../config/SensorCard'
 import { interceptors } from '../../data/interceptors'
 import { InterceptorCard } from '../config/InterceptorCard'
@@ -50,6 +50,15 @@ const settingsNav = [
 // --- Sub-pages ---
 
 function SensorsSection() {
+  const [search, setSearch] = useState('')
+  const filtered = useMemo(() => {
+    if (!search.trim()) return sensors
+    const q = search.toLowerCase()
+    return sensors.filter(
+      (s) => s.name.toLowerCase().includes(q) || s.description.toLowerCase().includes(q),
+    )
+  }, [search])
+
   return (
     <div className="space-y-4">
       <div>
@@ -58,18 +67,45 @@ function SensorsSection() {
           Sensors continuously monitor your data sources and detect meaningful changes
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {sensors.map((sensor, i) => (
-          <motion.div
-            key={sensor.id}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.05 + i * 0.04, duration: 0.3 }}
-          >
-            <SensorCard sensor={sensor} />
-          </motion.div>
-        ))}
+      <div className="relative">
+        <svg
+          className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-warmgrey"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input
+          type="text"
+          placeholder="Search sensors..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full pl-9 pr-3 py-2 rounded-lg border border-warmgrey/40 bg-white text-sm text-charcoal placeholder:text-warmgrey/60 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold"
+        />
       </div>
+      {filtered.length === 0 ? (
+        <p className="text-sm text-warmgrey py-8 text-center">
+          No sensors match &ldquo;{search}&rdquo;
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 2xl:grid-cols-2 gap-4">
+          {filtered.map((sensor, i) => (
+            <motion.div
+              key={sensor.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.05 + i * 0.04, duration: 0.3 }}
+            >
+              <SensorCard sensor={sensor} />
+            </motion.div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
@@ -99,79 +135,56 @@ function InterceptorsSection() {
   )
 }
 
-const dataSources = [
-  {
-    name: 'Microsoft 365 Email',
-    detail: 'j.harrison@firm.co.uk, s.patel@firm.co.uk — 12,847 emails indexed',
-    status: 'connected',
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-      </svg>
-    ),
-  },
-  {
-    name: 'Companies House API',
-    detail: 'Monitoring 9 companies — Last poll: 2 min ago',
-    status: 'connected',
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5M3.75 21V6.75A2.25 2.25 0 0 1 6 4.5h3a2.25 2.25 0 0 1 2.25 2.25V21m-7.5 0h7.5m3-10.5h3.75a2.25 2.25 0 0 1 2.25 2.25V21m-6 0h6" />
-      </svg>
-    ),
-  },
-  {
-    name: 'Xero',
-    detail: 'Awaiting OAuth authorisation',
-    status: 'pending',
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
-      </svg>
-    ),
-  },
-  {
-    name: 'HMRC Gateway',
-    detail: 'Connect to pull filing confirmations',
-    status: 'not_connected',
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-      </svg>
-    ),
-  },
-]
-
 const statusConfig = {
   connected: { label: 'Connected', classes: 'bg-emerald-100 text-emerald-800' },
-  pending: { label: 'Pending', classes: 'bg-orange-100 text-orange-800' },
-  not_connected: { label: 'Connect', classes: 'bg-warmgrey/20 text-charcoal/60' },
+  not_connected: { label: 'Not Connected', classes: 'bg-warmgrey/20 text-charcoal/60' },
+}
+
+/** Derive connection status per source from which sensors reference it */
+function getSourceStats() {
+  return sources.map((source) => {
+    const usedBy = sensors.filter((s) => s.sourceIds.includes(source.id))
+    const connectedBy = sensors.filter((s) => s.connectedSourceIds.includes(source.id))
+    return {
+      ...source,
+      sensorCount: usedBy.length,
+      connectedSensorCount: connectedBy.length,
+      status: connectedBy.length > 0 ? 'connected' : 'not_connected',
+    }
+  })
 }
 
 function DataSourcesSection() {
+  const enrichedSources = getSourceStats()
+
   return (
     <div className="max-w-2xl space-y-4">
       <div>
         <h2 className="font-serif text-xl font-bold text-nearblack">Data Sources</h2>
         <p className="text-sm text-warmgrey mt-1">
-          Connect and manage your external data integrations
+          External integrations that sensors draw from to detect signals
         </p>
       </div>
       <div className="space-y-3">
-        {dataSources.map((source, i) => {
+        {enrichedSources.map((source, i) => {
           const status = statusConfig[source.status]
           return (
             <motion.div
-              key={source.name}
+              key={source.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.05 + i * 0.04, duration: 0.3 }}
             >
               <Card className="p-4 flex items-center gap-4">
-                <div className="text-charcoal/60">{source.icon}</div>
+                <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-warmgrey/10 text-xs font-bold text-charcoal/70">
+                  {source.abbr}
+                </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-medium text-nearblack">{source.name}</div>
-                  <div className="text-xs text-charcoal/50 mt-0.5">{source.detail}</div>
+                  <div className="text-xs text-charcoal/50 mt-0.5">
+                    Used by {source.sensorCount} sensor{source.sensorCount !== 1 ? 's' : ''}
+                    {source.connectedSensorCount > 0 && ` · ${source.connectedSensorCount} connected`}
+                  </div>
                 </div>
                 <span className={`px-2.5 py-0.5 text-xs font-medium rounded-full whitespace-nowrap ${status.classes}`}>
                   {status.label}

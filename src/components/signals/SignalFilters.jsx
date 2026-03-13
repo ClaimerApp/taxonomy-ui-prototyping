@@ -1,58 +1,48 @@
 import { cn } from '../../lib/cn'
 
-const primaryFilters = ['All', 'Critical Warnings', 'Opportunities', 'Info']
-const statusFilters = ['In Progress', 'Resolved']
+const categoryFilters = ['All', 'Critical Warnings', 'Opportunities', 'Information']
+const statusFilters = ['In Progress', 'Resolved', 'Dismissed']
 
-export function SignalFilters({ activeFilter, statusFilter, onFilterChange, onStatusFilterChange, groupByClient, onGroupByClientChange }) {
+export function SignalFilters({ categoryFilter, statusFilter, onCategoryChange, onStatusChange }) {
   return (
-    <div className="flex items-center justify-between">
-      <div className="flex gap-2 items-center">
-        {primaryFilters.map((filter) => (
-          <button
-            key={filter}
-            onClick={() => onFilterChange(filter)}
-            className={cn(
-              'px-3 py-1.5 text-sm rounded-lg transition-colors',
-              activeFilter === filter
-                ? 'bg-charcoal text-cream'
-                : 'text-charcoal hover:bg-warmgrey/20',
-            )}
-          >
-            {filter}
-          </button>
-        ))}
-      </div>
-
-      <div className="flex gap-2 items-center">
+    <div className="flex gap-2 items-center flex-wrap">
+      {categoryFilters.map((filter) => (
         <button
-          onClick={() => onGroupByClientChange(!groupByClient)}
+          key={filter}
+          onClick={() => {
+            onCategoryChange(filter)
+            onStatusChange(null)
+          }}
           className={cn(
             'px-3 py-1.5 text-sm rounded-lg transition-colors',
-            groupByClient
+            categoryFilter === filter && !statusFilter
               ? 'bg-charcoal text-cream'
               : 'text-charcoal hover:bg-warmgrey/20',
           )}
         >
-          Group by client
+          {filter}
         </button>
+      ))}
 
-        <div className="w-px h-5 bg-warmgrey/30" />
+      <div className="w-px h-5 bg-warmgrey/30" />
 
-        {statusFilters.map((filter) => (
-          <button
-            key={filter}
-            onClick={() => onStatusFilterChange(statusFilter === filter ? null : filter)}
-            className={cn(
-              'px-3 py-1.5 text-sm rounded-lg transition-colors',
-              statusFilter === filter
-                ? 'bg-charcoal text-cream'
-                : 'text-charcoal hover:bg-warmgrey/20',
-            )}
-          >
-            {filter}
-          </button>
-        ))}
-      </div>
+      {statusFilters.map((filter) => (
+        <button
+          key={filter}
+          onClick={() => {
+            onStatusChange(statusFilter === filter ? null : filter)
+            onCategoryChange('All')
+          }}
+          className={cn(
+            'px-3 py-1.5 text-sm rounded-lg transition-colors',
+            statusFilter === filter
+              ? 'bg-charcoal text-cream'
+              : 'text-charcoal hover:bg-warmgrey/20',
+          )}
+        >
+          {filter}
+        </button>
+      ))}
     </div>
   )
 }

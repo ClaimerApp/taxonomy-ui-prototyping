@@ -6,22 +6,22 @@ import { signals } from '../../data/signals'
 
 const navItems = [
   {
-    label: 'Signals',
-    to: '/app',
-    end: true,
-    badge: '7 new',
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
-      </svg>
-    ),
-  },
-  {
     label: 'Checks',
     to: '/app/checks',
     icon: (
       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15a2.25 2.25 0 0 1 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0 1 18 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3 1.5 1.5 3-3.75" />
+      </svg>
+    ),
+  },
+  {
+    label: 'Signals',
+    to: '/app',
+    end: true,
+    badge: '12 new',
+    icon: (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
       </svg>
     ),
   },
@@ -47,7 +47,7 @@ function ActiveClients() {
     }
   }, [dropdownOpen])
 
-  // Compute active clients: entities with new/in_progress signals
+  // Compute active clients: non-former entities assigned to current user
   const activeClients = useMemo(() => {
     const openSignals = signals.filter(s => s.status === 'new' || s.status === 'in_progress')
     const entityStats = {}
@@ -57,12 +57,12 @@ function ActiveClients() {
       if (sig.urgency === 'critical') entityStats[sig.entityId].critical++
     }
     return entities
-      .filter(e => entityStats[e.id])
-      .map(e => ({ ...e, ...entityStats[e.id] }))
-      .sort((a, b) => b.critical - a.critical || b.total - a.total)
+      .filter(e => e.relationship !== 'former' && e.assignedTo === 'sarah-thompson')
+      .map(e => ({ ...e, critical: entityStats[e.id]?.critical || 0, total: entityStats[e.id]?.total || 0 }))
+      .sort((a, b) => b.critical - a.critical || b.total - a.total || a.name.localeCompare(b.name))
   }, [])
 
-  const displayed = activeClients.slice(0, 5)
+  const displayed = activeClients
 
   // Search results: filter all entities by name
   const searchResults = useMemo(() => {
@@ -125,12 +125,14 @@ function ActiveClients() {
             >
               <span
                 className="w-2 h-2 rounded-full flex-shrink-0"
-                style={{ backgroundColor: client.critical > 0 ? '#FFC832' : '#C4B8A8' }}
+                style={{ backgroundColor: client.critical > 0 ? '#FFC832' : client.total > 0 ? '#C4B8A8' : '#6B6360' }}
               />
               <span className="text-sm truncate flex-1">{client.name}</span>
-              <span className="text-xs bg-white/10 px-1.5 py-0.5 rounded-full flex-shrink-0">
-                {client.total}
-              </span>
+              {client.total > 0 && (
+                <span className="text-xs bg-white/10 px-1.5 py-0.5 rounded-full flex-shrink-0">
+                  {client.total}
+                </span>
+              )}
             </button>
           )
         })}

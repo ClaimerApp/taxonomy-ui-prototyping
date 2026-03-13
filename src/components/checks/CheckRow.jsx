@@ -1,12 +1,7 @@
 import { Link } from 'react-router-dom'
 import { cn } from '../../lib/cn'
 import { entities } from '../../data/entities'
-
-function worstResult(checks) {
-  if (checks.some((c) => c.result === 'critical')) return 'critical'
-  if (checks.some((c) => c.result === 'warning')) return 'warning'
-  return 'pass'
-}
+import { timeAgo } from '../../data/checks'
 
 const accentColor = {
   critical: 'bg-red-500',
@@ -18,6 +13,12 @@ const rowTint = {
   critical: 'bg-red-50/50',
   warning: 'bg-orange-50/50',
   pass: 'bg-emerald-50/30',
+}
+
+function worstResult(checks) {
+  if (checks.some(c => c.result === 'critical')) return 'critical'
+  if (checks.some(c => c.result === 'warning')) return 'warning'
+  return 'pass'
 }
 
 const fileTypeConfig = {
@@ -37,14 +38,6 @@ const fileTypeConfig = {
       </svg>
     ),
   },
-  filing: {
-    label: 'HMRC Filing',
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" />
-      </svg>
-    ),
-  },
 }
 
 function FileTypePill({ fileType }) {
@@ -57,17 +50,17 @@ function FileTypePill({ fileType }) {
   )
 }
 
-export function CheckRow({ file }) {
-  const worst = worstResult(file.checks)
-  const entityName = entities.find((e) => e.id === file.entityId)?.name
+export function CheckRow({ review }) {
+  const worst = worstResult(review.checks)
+  const entityName = entities.find(e => e.id === review.entityId)?.name
 
-  const passCount = file.checks.filter((c) => c.result === 'pass').length
-  const warningCount = file.checks.filter((c) => c.result === 'warning').length
-  const criticalCount = file.checks.filter((c) => c.result === 'critical').length
+  const passCount = review.checks.filter(c => c.result === 'pass').length
+  const warningCount = review.checks.filter(c => c.result === 'warning').length
+  const criticalCount = review.checks.filter(c => c.result === 'critical').length
 
   return (
     <Link
-      to={`/app/checks/${file.id}`}
+      to={`/app/checks/${review.id}`}
       className={cn(
         'flex items-stretch bg-white rounded-xl border border-warmgrey/20 overflow-hidden hover:shadow-md transition-all group',
         rowTint[worst],
@@ -78,11 +71,23 @@ export function CheckRow({ file }) {
       <div className="flex items-center gap-4 px-4 py-3 flex-1 min-w-0">
         <div className="min-w-0 flex-1">
           <h3 className="font-serif text-lg font-semibold text-nearblack truncate">
-            {entityName || file.entityId}
+            {entityName || review.entityId}
           </h3>
           <div className="flex items-center gap-2 mt-1">
-            <p className="text-sm text-charcoal/70 truncate">{file.fileName}</p>
-            <FileTypePill fileType={file.fileType} />
+            <p className="text-sm text-charcoal/70 truncate">{review.fileName}</p>
+            <FileTypePill fileType={review.fileType} />
+          </div>
+          <p className="text-xs text-warmgrey mt-1">Submitted by {review.submittedBy}</p>
+          <div className="mt-2">
+            {review.routing === 'back-to-junior' ? (
+              <span className="inline-flex items-center px-2.5 py-0.5 text-xs font-medium rounded-full bg-red-100 text-red-700">
+                Sent back for correction
+              </span>
+            ) : (
+              <span className="inline-flex items-center px-2.5 py-0.5 text-xs font-medium rounded-full bg-emerald-100 text-emerald-700">
+                Direct to partner
+              </span>
+            )}
           </div>
         </div>
 

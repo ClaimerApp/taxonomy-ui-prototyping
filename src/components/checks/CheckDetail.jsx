@@ -1,19 +1,9 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { checks } from '../../data/checks'
+import { fileReviews, checkCategories, timeAgo } from '../../data/checks'
 import { entities } from '../../data/entities'
 import { Badge } from '../ui/Badge'
 import { cn } from '../../lib/cn'
-
-function worstResult(fileChecks) {
-  if (fileChecks.some(c => c.result === 'critical')) return 'critical'
-  if (fileChecks.some(c => c.result === 'warning')) return 'warning'
-  return 'pass'
-}
-
-function formatDate(dateStr) {
-  return new Date(dateStr).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
-}
 
 const statusIcon = {
   pass: <span className="text-emerald-600">✓</span>,
@@ -22,60 +12,27 @@ const statusIcon = {
 }
 
 const fileTypeConfig = {
-  pdf: {
-    label: 'PDF',
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-      </svg>
-    ),
-  },
-  xlsx: {
-    label: 'Excel',
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 0 1-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0 1 12 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0h7.5c.621 0 1.125.504 1.125 1.125M3.375 8.25c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m17.25-3.75h-7.5c-.621 0-1.125.504-1.125 1.125m8.625-1.125c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125M12 10.875v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125M10.875 12c-.621 0-1.125.504-1.125 1.125M12 12c.621 0 1.125.504 1.125 1.125m0 0v1.5c0 .621-.504 1.125-1.125 1.125m1.125-2.625c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125M10.875 12c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125" />
-      </svg>
-    ),
-  },
-  filing: {
-    label: 'HMRC Filing',
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" />
-      </svg>
-    ),
-  },
-}
-
-function FileTypePill({ fileType }) {
-  const config = fileTypeConfig[fileType] || fileTypeConfig.pdf
-  return (
-    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full bg-warmgrey/15 text-charcoal/70">
-      {config.icon}
-      {config.label}
-    </span>
-  )
+  pdf: { label: 'PDF' },
+  xlsx: { label: 'Excel' },
 }
 
 export default function CheckDetail() {
   const { id } = useParams()
-  const file = checks.find(f => f.id === id)
-  const entity = entities.find(e => e.id === file?.entityId)
+  const review = fileReviews.find(r => r.id === id)
+  const entity = entities.find(e => e.id === review?.entityId)
   const [expanded, setExpanded] = useState(new Set())
+  const [collapsedCategories, setCollapsedCategories] = useState(new Set())
 
-  if (!file) {
+  if (!review) {
     return (
       <div className="text-center py-12">
-        <p className="text-warmgrey">File not found.</p>
+        <p className="text-warmgrey">Review not found.</p>
         <Link to="/app/checks" className="text-darkgold hover:underline text-sm mt-2 inline-block">
-          Back to file reviews
+          Back to checkers
         </Link>
       </div>
     )
   }
-
-  const overall = worstResult(file.checks)
 
   function toggleCheck(checkId) {
     setExpanded(prev => {
@@ -86,83 +43,178 @@ export default function CheckDetail() {
     })
   }
 
+  function toggleCategory(catId) {
+    setCollapsedCategories(prev => {
+      const next = new Set(prev)
+      if (next.has(catId)) next.delete(catId)
+      else next.add(catId)
+      return next
+    })
+  }
+
+  const grouped = checkCategories.map(cat => {
+    const checks = review.checks.filter(c => c.category === cat.id)
+    const passCount = checks.filter(c => c.result === 'pass').length
+    const hasNonPass = checks.some(c => c.result !== 'pass')
+    return { ...cat, checks, passCount, total: checks.length, hasNonPass }
+  })
+
   return (
     <div className="space-y-6">
       <Link to="/app/checks" className="text-sm text-charcoal/60 hover:text-charcoal transition-colors">
-        &larr; File Reviews
+        &larr; Checkers
       </Link>
 
-      <div className="space-y-3">
+      {/* Routing info card */}
+      <div className={cn(
+        'rounded-xl border p-4',
+        review.routing === 'back-to-junior'
+          ? 'border-red-200 bg-red-50/50'
+          : 'border-emerald-200 bg-emerald-50/50',
+      )}>
+        <div className="flex items-center gap-3 mb-2">
+          {review.routing === 'back-to-junior' ? (
+            <span className="inline-flex items-center px-2.5 py-0.5 text-xs font-medium rounded-full bg-red-100 text-red-700">
+              Sent back for correction
+            </span>
+          ) : (
+            <span className="inline-flex items-center px-2.5 py-0.5 text-xs font-medium rounded-full bg-emerald-100 text-emerald-700">
+              Direct to partner
+            </span>
+          )}
+          <span className="text-xs text-charcoal/50">{timeAgo(review.reviewedAt)}</span>
+        </div>
+        <p className="text-sm text-charcoal/80">{review.routingReason}</p>
+        <p className="text-xs text-warmgrey mt-2">Submitted by {review.submittedBy}</p>
+      </div>
+
+      {/* File info */}
+      <div className="space-y-2">
         <div className="flex items-center gap-3">
-          <FileTypePill fileType={file.fileType} />
-          <Badge variant={overall}>{overall}</Badge>
+          <span className="inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-full bg-warmgrey/15 text-charcoal/70">
+            {fileTypeConfig[review.fileType]?.label || 'PDF'}
+          </span>
         </div>
-
-        <h1 className="font-serif text-2xl font-bold text-nearblack">{file.fileName}</h1>
-
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
-          <Link
-            to={`/app/entities/${file.entityId}`}
-            className="text-darkgold hover:underline font-medium"
-          >
-            {entity?.name || file.entityId}
-          </Link>
-          <span className="text-charcoal/50">Reviewed {formatDate(file.reviewedAt)}</span>
-        </div>
+        <h1 className="font-serif text-2xl font-bold text-nearblack">{review.fileName}</h1>
+        <Link
+          to={`/app/entities/${review.entityId}`}
+          className="text-darkgold hover:underline font-medium text-sm"
+        >
+          {entity?.name || review.entityId}
+        </Link>
       </div>
 
-      <div className="space-y-3">
-        {file.checks.map(check => {
-          const isExpanded = expanded.has(check.id)
-          return (
-            <div
-              key={check.id}
-              className="bg-white rounded-xl border border-warmgrey/20 p-4"
+      {/* Grouped checks */}
+      {grouped.map(cat => {
+        const isCollapsed = collapsedCategories.has(cat.id)
+        return (
+          <div key={cat.id} className="space-y-3">
+            <button
+              onClick={() => toggleCategory(cat.id)}
+              className="flex items-center gap-2 w-full text-left group"
             >
-              <button
-                onClick={() => toggleCheck(check.id)}
-                className="flex items-center gap-3 w-full text-left"
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className={cn('w-4 h-4 text-warmgrey transition-transform', !isCollapsed && 'rotate-90')}
               >
-                <span className="text-lg shrink-0">{statusIcon[check.result]}</span>
-                <span className="font-medium text-nearblack flex-1">{check.name}</span>
-                <Badge variant={check.result}>{check.result}</Badge>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className={cn('w-5 h-5 text-warmgrey transition-transform shrink-0', isExpanded && 'rotate-180')}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                </svg>
-              </button>
+                <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+              </svg>
+              <h2 className="font-serif text-lg font-semibold text-nearblack">
+                {cat.label}
+              </h2>
+              <span className="text-sm text-charcoal/50">
+                ({cat.passCount}/{cat.total} passed)
+              </span>
+            </button>
 
-              {isExpanded && (
-                <div className="mt-3 pl-8 space-y-3">
-                  <p className="text-sm text-charcoal/80">{check.summary}</p>
+            {!isCollapsed && (
+              <div className="space-y-3 ml-6">
+                {cat.checks.map(check => {
+                  const isExpanded = expanded.has(check.id)
+                  return (
+                    <div
+                      key={check.id}
+                      className="bg-white rounded-xl border border-warmgrey/20 p-4"
+                    >
+                      <button
+                        onClick={() => toggleCheck(check.id)}
+                        className="flex items-center gap-3 w-full text-left"
+                      >
+                        <span className="text-lg shrink-0">{statusIcon[check.result]}</span>
+                        <span className="font-medium text-nearblack flex-1">{check.name}</span>
+                        {check.autoFixed && (
+                          <span className="inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full bg-emerald-100 text-emerald-700">
+                            Auto-corrected
+                          </span>
+                        )}
+                        {check.confidence && (
+                          <span className="text-xs text-warmgrey">{Math.round(check.confidence * 100)}%</span>
+                        )}
+                        <Badge variant={check.result}>{check.result}</Badge>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className={cn('w-5 h-5 text-warmgrey transition-transform shrink-0', isExpanded && 'rotate-180')}
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                        </svg>
+                      </button>
 
-                  {check.evidence && (
-                    <div className="border-l-4 border-gold pl-4">
-                      <p className="text-sm text-charcoal/70 italic">{check.evidence}</p>
+                      {isExpanded && (
+                        <div className="mt-3 pl-8 space-y-3">
+                          <p className="text-sm text-charcoal/80">{check.summary}</p>
+
+                          {check.evidence && (
+                            <div className="border-l-4 border-gold pl-4">
+                              <p className="text-xs font-medium text-charcoal/50 mb-1">Evidence</p>
+                              <p className="text-sm text-charcoal/70 italic">{check.evidence}</p>
+                            </div>
+                          )}
+
+                          {check.reasoning && (
+                            <div className="border-l-4 border-warmgrey/40 pl-4">
+                              <p className="text-xs font-medium text-charcoal/50 mb-1">Reasoning</p>
+                              <p className="text-sm text-charcoal/70">{check.reasoning}</p>
+                            </div>
+                          )}
+
+                          {check.autoFixed && (
+                            <div className="bg-emerald-50 rounded-lg p-3 space-y-1">
+                              <p className="text-xs font-medium text-emerald-700">Auto-corrected</p>
+                              <div className="flex items-center gap-2 text-sm">
+                                <span className="line-through text-charcoal/50">{check.originalValue}</span>
+                                <span className="text-charcoal/40">&rarr;</span>
+                                <span className="font-medium text-emerald-700">{check.correctedValue}</span>
+                              </div>
+                            </div>
+                          )}
+
+                          {check.regulatoryRef && (
+                            <p className="text-xs text-charcoal/60">Ref: {check.regulatoryRef}</p>
+                          )}
+
+                          {check.suggestedFix && !check.autoFixed && (
+                            <div className="bg-cream rounded-lg p-3">
+                              <p className="text-sm text-charcoal/80">Suggested fix: {check.suggestedFix}</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
-                  )}
-
-                  {check.regulatoryRef && (
-                    <p className="text-xs text-charcoal/60">Ref: {check.regulatoryRef}</p>
-                  )}
-
-                  {check.suggestedFix && (
-                    <div className="bg-cream rounded-lg p-3">
-                      <p className="text-sm text-charcoal/80">Suggested fix: {check.suggestedFix}</p>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          )
-        })}
-      </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+        )
+      })}
     </div>
   )
 }

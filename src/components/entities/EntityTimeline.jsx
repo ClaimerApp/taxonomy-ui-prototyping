@@ -132,62 +132,68 @@ export function EntityTimeline({ timeline, showFilters = false }) {
         </div>
       )}
 
-      <div className="relative pl-12">
-        <div className="absolute left-4 top-4 bottom-0 w-px bg-warmgrey/30" />
-        <div className="space-y-0">
-          {filtered.map((item, i) => {
-            const isFuture = item.date > today
-            const showDateHeader = item.date !== lastDate
-            lastDate = item.date
+      <div>
+        {filtered.map((item, i) => {
+          const isFuture = item.date > today
+          const isLast = i === filtered.length - 1
+          const showDateHeader = item.date !== lastDate
+          lastDate = item.date
 
-            return (
-              <motion.div
-                key={`${item.date}-${item.event}-${i}`}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.04, duration: 0.3 }}
-              >
-                {showDateHeader && (
-                  <p className={cn(
-                    'text-xs font-medium mb-1 mt-4 first:mt-0',
-                    isFuture ? 'text-orange-600' : 'text-warmgrey',
-                  )}>
-                    {formatDate(item.date)}
-                    {isFuture && ' — upcoming'}
-                  </p>
-                )}
-                <div className={cn(
-                  'relative flex gap-3 py-2',
-                  isFuture && 'opacity-80',
+          return (
+            <motion.div
+              key={`${item.date}-${item.event}-${i}`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.04, duration: 0.3 }}
+            >
+              {showDateHeader && (
+                <p className={cn(
+                  'text-xs font-medium mb-1 pl-11',
+                  i === 0 ? 'mt-0' : 'mt-4',
+                  isFuture ? 'text-orange-600' : 'text-warmgrey',
                 )}>
-                  {/* Connector override for future items */}
-                  {isFuture && (
-                    <div className="absolute -left-8 top-0 bottom-0 w-px border-l border-dashed border-orange-300" style={{ left: '15px' }} />
-                  )}
-                  <div className="absolute left-[-32px]">
-                    <TypeIcon type={item.type} />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className={cn('text-sm', isFuture ? 'text-orange-800' : 'text-charcoal')}>
-                      {item.event}
-                    </p>
-                    {item.detail && (
-                      <p className="text-xs text-warmgrey mt-0.5">{item.detail}</p>
-                    )}
-                  </div>
-                  {item.source && (
-                    <span className={cn(
-                      'text-[10px] font-medium px-1.5 py-0.5 rounded-full shrink-0 self-start',
-                      sourceBadge[item.source] || sourceBadge.private,
-                    )}>
-                      {item.source}
-                    </span>
+                  {formatDate(item.date)}
+                  {isFuture && ' — upcoming'}
+                </p>
+              )}
+              <div className={cn('flex gap-3', isFuture && 'opacity-80')}>
+                {/* Icon column with connector line */}
+                <div className="relative flex flex-col items-center">
+                  <TypeIcon type={item.type} />
+                  {!isLast && (
+                    <div className={cn(
+                      'flex-1 w-px mt-1',
+                      isFuture
+                        ? 'border-l border-dashed border-orange-300'
+                        : 'bg-warmgrey/30',
+                    )} />
                   )}
                 </div>
-              </motion.div>
-            )
-          })}
-        </div>
+                {/* Content */}
+                <div className={cn('min-w-0 flex-1 pb-4', isLast && 'pb-0')}>
+                  <div className="flex items-start gap-2">
+                    <div className="min-w-0 flex-1">
+                      <p className={cn('text-sm', isFuture ? 'text-orange-800' : 'text-charcoal')}>
+                        {item.event}
+                      </p>
+                      {item.detail && (
+                        <p className="text-xs text-warmgrey mt-0.5">{item.detail}</p>
+                      )}
+                    </div>
+                    {item.source && (
+                      <span className={cn(
+                        'text-[10px] font-medium px-1.5 py-0.5 rounded-full shrink-0',
+                        sourceBadge[item.source] || sourceBadge.private,
+                      )}>
+                        {item.source}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )
+        })}
       </div>
     </div>
   )

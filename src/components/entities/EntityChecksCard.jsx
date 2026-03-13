@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { checks } from '../../data/checks'
+import { fileReviews } from '../../data/checks'
 import { Card } from '../ui/Card'
 import { Badge } from '../ui/Badge'
 
@@ -10,7 +10,7 @@ function worstResult(fileChecks) {
 }
 
 export function EntityChecksCard({ entityId }) {
-  const entityChecks = checks.filter((c) => c.entityId === entityId)
+  const entityChecks = fileReviews.filter((c) => c.entityId === entityId)
 
   if (entityChecks.length === 0) {
     return (
