@@ -42,11 +42,17 @@ export default function ChecksFeed() {
         <p className="text-sm text-charcoal/60 mt-1">Automated review tools that check work before it reaches the partner.</p>
       </div>
 
-      <CheckerOverviewCard checker={checkers[0]} />
-
-      <div className="rounded-xl border border-dashed border-warmgrey/40 p-4 flex items-center justify-center">
-        <p className="text-sm text-warmgrey">More checkers coming soon</p>
+      <div className="bg-white rounded-xl border border-warmgrey/20 p-4 flex items-start gap-3">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-warmgrey shrink-0 mt-0.5">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+        </svg>
+        <div>
+          <p className="text-sm text-charcoal/80">Send a report for review by emailing <span className="font-medium text-nearblack">review@atlas.claimer.com</span></p>
+          <p className="text-xs text-warmgrey mt-1">Attach the report as a PDF. You will be emailed the result of the check automatically.</p>
+        </div>
       </div>
+
+      <CheckerOverviewCard checker={checkers[0]} />
 
       <div className="space-y-4">
         <h2 className="font-serif text-lg font-semibold text-nearblack">Review Queue</h2>
