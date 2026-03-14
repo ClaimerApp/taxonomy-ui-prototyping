@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { cn } from '../../lib/cn'
 import { entities } from '../../data/entities'
-import { timeAgo } from '../../data/checks'
+import { checkers, timeAgo } from '../../data/checks'
 
 const accentColor = {
   critical: 'bg-red-500',
@@ -50,13 +50,17 @@ function FileTypePill({ fileType }) {
   )
 }
 
-export function CheckRow({ review }) {
+export function CheckRow({ review, showChecker = true }) {
   const worst = worstResult(review.checks)
   const entityName = entities.find(e => e.id === review.entityId)?.name
+  const checker = showChecker ? checkers.find(c => c.id === review.checkerId) : null
 
   const passCount = review.checks.filter(c => c.result === 'pass').length
   const warningCount = review.checks.filter(c => c.result === 'warning').length
   const criticalCount = review.checks.filter(c => c.result === 'critical').length
+
+  const fyYear = review.fileName.match(/FY(\d{4})/)?.[1]
+  const claimTitle = fyYear ? `R&D Tax Claim FY ending ${fyYear}` : review.fileName
 
   return (
     <Link
@@ -71,13 +75,25 @@ export function CheckRow({ review }) {
       <div className="flex items-center gap-4 px-4 py-3 flex-1 min-w-0">
         <div className="min-w-0 flex-1">
           <h3 className="font-serif text-lg font-semibold text-nearblack truncate">
-            {entityName || review.entityId}
+            {entityName || review.entityId} &middot; {claimTitle}
           </h3>
-          <div className="flex items-center gap-2 mt-1">
-            <p className="text-sm text-charcoal/70 truncate">{review.fileName}</p>
+          <div className="flex items-center gap-2 mt-1 text-xs text-warmgrey">
+            {checker && (
+              <>
+                <Link
+                  to={`/app/checks/checker/${checker.id}`}
+                  onClick={e => e.stopPropagation()}
+                  className="text-darkgold hover:underline"
+                >
+                  {checker.name}
+                </Link>
+                <span>·</span>
+              </>
+            )}
+            <span>Submitted by {review.submittedBy}</span>
+            <span>·</span>
             <FileTypePill fileType={review.fileType} />
           </div>
-          <p className="text-xs text-warmgrey mt-1">Submitted by {review.submittedBy}</p>
           <div className="mt-2">
             {review.routing === 'back-to-junior' ? (
               <span className="inline-flex items-center px-2.5 py-0.5 text-xs font-medium rounded-full bg-red-100 text-red-700">
@@ -85,7 +101,7 @@ export function CheckRow({ review }) {
               </span>
             ) : (
               <span className="inline-flex items-center px-2.5 py-0.5 text-xs font-medium rounded-full bg-emerald-100 text-emerald-700">
-                Direct to partner
+                Direct to reviewer
               </span>
             )}
           </div>

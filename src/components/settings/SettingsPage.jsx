@@ -7,8 +7,18 @@ import { sensors, sources } from '../../data/sensors'
 import { SensorCard } from '../config/SensorCard'
 import { interceptors } from '../../data/interceptors'
 import { InterceptorCard } from '../config/InterceptorCard'
+import { checkers, checkCategories, checkDefinitions } from '../../data/checks'
 
 const settingsNav = [
+  {
+    label: 'Checkers',
+    to: '/app/settings/checkers',
+    icon: (
+      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.745 3.745 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
+      </svg>
+    ),
+  },
   {
     label: 'Sensors',
     to: '/app/settings/sensors',
@@ -241,6 +251,56 @@ function AlertDeliverySection() {
   )
 }
 
+function CheckersSection() {
+  const checker = checkers[0]
+  const [disabledChecks, setDisabledChecks] = useState([])
+
+  const toggleCheck = (id) => {
+    setDisabledChecks((prev) =>
+      prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id],
+    )
+  }
+
+  return (
+    <div className="max-w-2xl space-y-6">
+      <div>
+        <h2 className="font-serif text-xl font-bold text-nearblack">{checker.name}</h2>
+        <p className="text-sm text-warmgrey mt-1">{checker.description}</p>
+      </div>
+
+      {checkCategories.map((cat) => {
+        const checks = checkDefinitions.filter((c) => c.category === cat.id)
+        return (
+          <div key={cat.id} className="space-y-3">
+            <h3 className="text-xs font-semibold text-charcoal/50 uppercase tracking-wider">
+              {cat.label}
+            </h3>
+            {checks.map((check, i) => {
+              const enabled = !disabledChecks.includes(check.id)
+              return (
+                <motion.div
+                  key={check.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.05 + i * 0.04, duration: 0.3 }}
+                >
+                  <Card className="p-4 flex items-center justify-between gap-4">
+                    <div className="min-w-0">
+                      <div className="text-sm font-medium text-nearblack">{check.name}</div>
+                      <div className="text-xs text-charcoal/50 mt-0.5">{check.description}</div>
+                    </div>
+                    <Toggle enabled={enabled} onToggle={() => toggleCheck(check.id)} />
+                  </Card>
+                </motion.div>
+              )
+            })}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 // --- Main settings layout ---
 
 const sectionMap = {
@@ -248,12 +308,13 @@ const sectionMap = {
   interceptors: InterceptorsSection,
   'data-sources': DataSourcesSection,
   alerts: AlertDeliverySection,
+  checkers: CheckersSection,
 }
 
 export function SettingsPage({ section }) {
   const { pathname } = useLocation()
-  const activeSection = section || 'sensors'
-  const SectionComponent = sectionMap[activeSection] || SensorsSection
+  const activeSection = section || 'checkers'
+  const SectionComponent = sectionMap[activeSection] || CheckersSection
 
   return (
     <div className="-m-8 flex min-h-screen">

@@ -4,4 +4,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   base: '/taxonomy-ui-prototyping/',
+  server: {
+    port: 5174,
+  },
 })

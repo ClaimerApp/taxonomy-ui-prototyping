@@ -24,12 +24,14 @@ export default function App() {
       <Route path="/app/signals/:id" element={<AppPage />} />
       <Route path="/app/entities/:id" element={<AppPage />} />
       <Route path="/app/checks" element={<AppPage />} />
+      <Route path="/app/checks/checker/:checkerId" element={<AppPage />} />
       <Route path="/app/checks/:id" element={<AppPage />} />
       <Route path="/app/settings" element={<AppPage />} />
       <Route path="/app/settings/sensors" element={<AppPage />} />
       <Route path="/app/settings/interceptors" element={<AppPage />} />
       <Route path="/app/settings/data-sources" element={<AppPage />} />
       <Route path="/app/settings/alerts" element={<AppPage />} />
+      <Route path="/app/settings/checkers" element={<AppPage />} />
     </Routes>
   )
 }

@@ -9,7 +9,7 @@ import ChecksFeed from '../components/checks/ChecksFeed';
 import CheckDetail from '../components/checks/CheckDetail';
 
 export default function AppPage() {
-  const { id } = useParams();
+  const { id, checkerId } = useParams();
   const { pathname } = useLocation();
 
   let content;
@@ -20,6 +20,8 @@ export default function AppPage() {
     content = <EntityPage id={id} />;
   } else if (pathname === '/app/entities') {
     content = <EntityList />;
+  } else if (pathname.startsWith('/app/checks/checker/') && checkerId) {
+    content = <ChecksFeed checkerId={checkerId} />;
   } else if (pathname.startsWith('/app/checks/') && id) {
     content = <CheckDetail />;
   } else if (pathname === '/app/checks') {
