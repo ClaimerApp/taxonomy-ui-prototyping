@@ -12,7 +12,7 @@ const relativeDate = (dateStr) => {
   return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
 }
 
-export default function EmailRow({ email, selected, onClick }) {
+export default function EmailRow({ email, selected, onClick, isSent }) {
   const initials = email.from.initials || email.from.name.charAt(0)
   const unread = !email.read
 
@@ -39,12 +39,17 @@ export default function EmailRow({ email, selected, onClick }) {
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           <span className={cn('text-sm truncate', unread ? 'font-bold text-slate-900' : 'font-medium text-slate-700')}>
-            {email.from.name}
+            {isSent ? `To: ${email.to}` : email.from.name}
           </span>
           {email.isAtlas && (
             <span className="text-[10px] font-semibold text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded shrink-0">
               Atlas
             </span>
+          )}
+          {email.attachments?.length > 0 && (
+            <svg className="w-3.5 h-3.5 text-slate-400 shrink-0" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path d="M15.621 4.379a3.012 3.012 0 00-4.257 0L5.636 10.107a2.008 2.008 0 002.839 2.839l5.728-5.728a1.004 1.004 0 00-1.42-1.42L7.056 11.527" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           )}
         </div>
         <div className={cn('text-sm truncate', unread ? 'font-semibold text-slate-800' : 'text-slate-600')}>

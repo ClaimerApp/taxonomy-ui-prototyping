@@ -18,6 +18,8 @@ export default function App() {
       <Route path="/mvp-onboarding/user/:step" element={<MvpOnboardingPage />} />
       <Route path="/mvp-onboarding/processing" element={<MvpOnboardingPage />} />
       <Route path="/email" element={<EmailPage />} />
+      <Route path="/email/sent" element={<EmailPage />} />
+      <Route path="/email/sent/:id" element={<EmailPage />} />
       <Route path="/email/:id" element={<EmailPage />} />
       <Route path="/app" element={<AppPage />} />
       <Route path="/app/entities" element={<AppPage />} />
@@ -32,6 +34,7 @@ export default function App() {
       <Route path="/app/settings/data-sources" element={<AppPage />} />
       <Route path="/app/settings/alerts" element={<AppPage />} />
       <Route path="/app/settings/checkers" element={<AppPage />} />
+      <Route path="/app/settings/demo" element={<AppPage />} />
     </Routes>
   )
 }

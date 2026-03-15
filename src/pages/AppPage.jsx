@@ -27,7 +27,7 @@ export default function AppPage() {
   } else if (pathname === '/app/checks') {
     content = <ChecksFeed />;
   } else if (pathname.startsWith('/app/settings')) {
-    const section = pathname.split('/app/settings/')[1] || 'sensors';
+    const section = pathname.split('/app/settings/')[1] || 'checkers';
     content = <SettingsPage section={section} />;
   } else {
     content = <SignalFeed />;

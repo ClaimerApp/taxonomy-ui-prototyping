@@ -1,6 +1,6 @@
 import EmailRow from './EmailRow'
 
-export default function Inbox({ emails, selectedId, onSelect }) {
+export default function Inbox({ emails, selectedId, onSelect, isSent }) {
   return (
     <div className="overflow-y-auto h-full divide-y divide-slate-100">
       {emails.map((email) => (
@@ -9,6 +9,7 @@ export default function Inbox({ emails, selectedId, onSelect }) {
           email={email}
           selected={email.id === selectedId}
           onClick={() => onSelect(email.id)}
+          isSent={isSent}
         />
       ))}
     </div>

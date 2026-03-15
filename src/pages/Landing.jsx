@@ -5,7 +5,7 @@ import Logo from '../components/ui/Logo'
 
 const experiences = [
   { to: '/onboarding/login', title: 'Onboarding Experience', desc: 'See the setup flow for new firms and advisors', icon: 'M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z' },
-  { to: '/email', title: 'Signals Experience', desc: 'Explore the email digest and Atlas signal feed', icon: 'M13 10V3L4 14h7v7l9-11h-7z' },
+  { to: '/email', title: 'Checking Experience', desc: 'Explore the email digest and R&D tax checking workflow', icon: 'M13 10V3L4 14h7v7l9-11h-7z' },
 ]
 
 const devExperiences = [

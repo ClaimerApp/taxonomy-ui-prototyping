@@ -3,6 +3,7 @@ import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom'
 import Logo from '../ui/Logo'
 import { entities } from '../../data/entities'
 import { signals } from '../../data/signals'
+import { useDemoSettings } from '../../contexts/DemoSettingsContext'
 
 const navItems = [
   {
@@ -146,6 +147,9 @@ export default function AppShell({ children }) {
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const menuRef = useRef(null)
   const navigate = useNavigate()
+  const { isAdvanced } = useDemoSettings()
+
+  const visibleNav = isAdvanced ? navItems : navItems.filter(i => i.label !== 'Signals')
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -170,7 +174,7 @@ export default function AppShell({ children }) {
 
         {/* Nav */}
         <nav className="py-4 space-y-1">
-          {navItems.map((item) => (
+          {visibleNav.map((item) => (
             <NavLink
               key={item.label}
               to={item.to}

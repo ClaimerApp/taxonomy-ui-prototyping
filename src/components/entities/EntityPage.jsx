@@ -8,16 +8,22 @@ import { EntityTimelineTab } from './EntityTimelineTab'
 import { EntityFilesTab } from './EntityFilesTab'
 import { EntityCommsTab } from './EntityCommsTab'
 import { EntityDetailsTab } from './EntityDetailsTab'
+import { useDemoSettings } from '../../contexts/DemoSettingsContext'
 
 const FLAG_MAP = {
   GB: '🇬🇧', IE: '🇮🇪', DE: '🇩🇪', US: '🇺🇸', FR: '🇫🇷',
 }
 
-const tabs = [
+const allTabs = [
   { key: 'signals', label: 'Signals & Checks' },
   { key: 'timeline', label: 'Timeline' },
   { key: 'files', label: 'Files' },
   { key: 'communications', label: 'Communications' },
+  { key: 'details', label: 'Details' },
+]
+
+const simplifiedTabs = [
+  { key: 'signals', label: 'Checks' },
   { key: 'details', label: 'Details' },
 ]
 
@@ -30,6 +36,8 @@ const relationshipVariant = {
 export default function EntityPage() {
   const { id } = useParams()
   const entity = entities.find((e) => e.id === id)
+  const { isAdvanced } = useDemoSettings()
+  const tabs = isAdvanced ? allTabs : simplifiedTabs
   const [activeTab, setActiveTab] = useState('signals')
 
   if (!entity) {

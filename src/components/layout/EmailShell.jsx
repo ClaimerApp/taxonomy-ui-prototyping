@@ -1,8 +1,8 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const folders = [
-  { label: 'Inbox', count: 3 },
-  { label: 'Sent Items' },
+  { label: 'Inbox', count: 4, path: '/email' },
+  { label: 'Sent Items', path: '/email/sent' },
   { label: 'Drafts' },
   { label: 'Deleted Items' },
 ]
@@ -10,6 +10,8 @@ const folders = [
 const toolbarActions = ['New', 'Reply', 'Forward', 'Delete']
 
 export default function EmailShell({ activeFolder = 'Inbox', children }) {
+  const navigate = useNavigate()
+
   return (
     <div className="flex h-screen bg-white">
       {/* Sidebar */}
@@ -33,11 +35,12 @@ export default function EmailShell({ activeFolder = 'Inbox', children }) {
             return (
               <button
                 key={folder.label}
+                onClick={() => folder.path && navigate(folder.path)}
                 className={`w-full text-left px-4 py-2 text-sm flex items-center justify-between transition-colors ${
                   isActive
                     ? 'border-l-2 border-blue-500 bg-blue-50 text-blue-700 font-medium'
                     : 'border-l-2 border-transparent text-slate-600 hover:bg-slate-100'
-                }`}
+                } ${folder.path ? 'cursor-pointer' : 'cursor-default'}`}
               >
                 <span>{folder.label}</span>
                 {folder.count && (

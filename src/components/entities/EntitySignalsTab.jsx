@@ -2,11 +2,42 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { cn } from '../../lib/cn'
 import { signals } from '../../data/signals'
+import { fileReviews } from '../../data/checks'
 import { Card } from '../ui/Card'
 import { Badge } from '../ui/Badge'
+import { CheckRow } from '../checks/CheckRow'
 import { EntityChecksCard } from './EntityChecksCard'
+import { useDemoSettings } from '../../contexts/DemoSettingsContext'
 
 export function EntitySignalsTab({ entityId }) {
+  const { isAdvanced } = useDemoSettings()
+  const entityChecks = fileReviews.filter((c) => c.entityId === entityId)
+
+  if (!isAdvanced) {
+    return (
+      <div className="space-y-3">
+        {entityChecks.length === 0 ? (
+          <Card className="p-8 text-center">
+            <p className="text-sm text-warmgrey">No checks run for this entity.</p>
+          </Card>
+        ) : (
+          <div className="space-y-3">
+            {entityChecks.map((review, i) => (
+              <motion.div
+                key={review.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.04, duration: 0.3 }}
+              >
+                <CheckRow review={review} showChecker={false} />
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </div>
+    )
+  }
+
   const entitySignals = signals.filter((s) => s.entityId === entityId)
 
   return (

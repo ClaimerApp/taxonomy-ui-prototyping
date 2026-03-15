@@ -8,6 +8,7 @@ import { SensorCard } from '../config/SensorCard'
 import { interceptors } from '../../data/interceptors'
 import { InterceptorCard } from '../config/InterceptorCard'
 import { checkers, checkCategories, checkDefinitions } from '../../data/checks'
+import { useDemoSettings } from '../../contexts/DemoSettingsContext'
 
 const settingsNav = [
   {
@@ -301,6 +302,28 @@ function CheckersSection() {
   )
 }
 
+function DemoSettingsSection({ isAdvanced, setAdvanced }) {
+  return (
+    <div className="max-w-md space-y-4">
+      <div>
+        <h2 className="font-serif text-xl font-bold text-nearblack">Demo Settings</h2>
+        <p className="text-sm text-warmgrey mt-1">
+          Control which features are visible during demos
+        </p>
+      </div>
+      <Card className="p-4 flex items-center justify-between gap-4">
+        <div className="min-w-0">
+          <div className="text-sm font-medium text-nearblack">Advanced mode</div>
+          <div className="text-xs text-charcoal/50 mt-0.5">
+            Show Signals, Sensors, Interceptors and other advanced features
+          </div>
+        </div>
+        <Toggle enabled={isAdvanced} onToggle={() => setAdvanced(!isAdvanced)} />
+      </Card>
+    </div>
+  )
+}
+
 // --- Main settings layout ---
 
 const sectionMap = {
@@ -309,42 +332,65 @@ const sectionMap = {
   'data-sources': DataSourcesSection,
   alerts: AlertDeliverySection,
   checkers: CheckersSection,
+  demo: DemoSettingsSection,
 }
+
+const advancedOnlyLabels = ['Sensors', 'Interceptors', 'Alert Delivery']
 
 export function SettingsPage({ section }) {
   const { pathname } = useLocation()
+  const { isAdvanced, setAdvanced } = useDemoSettings()
   const activeSection = section || 'checkers'
   const SectionComponent = sectionMap[activeSection] || CheckersSection
+
+  const visibleNav = isAdvanced
+    ? settingsNav
+    : settingsNav.filter((item) => !advancedOnlyLabels.includes(item.label))
 
   return (
     <div className="-m-8 flex min-h-screen">
       {/* Settings sidebar */}
-      <div className="w-56 border-r border-warmgrey/20 bg-cream pt-6 px-3 space-y-1 shrink-0">
+      <div className="w-56 border-r border-warmgrey/20 bg-cream pt-6 px-3 shrink-0 flex flex-col">
         <h2 className="text-xs font-semibold text-charcoal/50 uppercase tracking-wider px-3 mb-3">
           Settings
         </h2>
-        {settingsNav.map((item) => (
+        <div className="space-y-1">
+          {visibleNav.map((item) => (
+            <NavLink
+              key={item.label}
+              to={item.to}
+              className={() => {
+                const isActive = pathname === item.to
+                return `flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
+                  isActive
+                    ? 'text-nearblack bg-warmgrey/15 font-medium'
+                    : 'text-charcoal/60 hover:text-nearblack hover:bg-warmgrey/10'
+                }`
+              }}
+            >
+              {item.icon}
+              {item.label}
+            </NavLink>
+          ))}
+        </div>
+        <div className="mt-auto pb-6">
           <NavLink
-            key={item.label}
-            to={item.to}
+            to="/app/settings/demo"
             className={() => {
-              const isActive = pathname === item.to
-              return `flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
-                isActive
-                  ? 'text-nearblack bg-warmgrey/15 font-medium'
-                  : 'text-charcoal/60 hover:text-nearblack hover:bg-warmgrey/10'
+              const isActive = pathname === '/app/settings/demo'
+              return `block px-3 py-2 text-xs transition-colors ${
+                isActive ? 'text-charcoal/60' : 'text-warmgrey/50 hover:text-warmgrey'
               }`
             }}
           >
-            {item.icon}
-            {item.label}
+            Demo Settings
           </NavLink>
-        ))}
+        </div>
       </div>
 
       {/* Settings content */}
       <div className="flex-1 p-8">
-        <SectionComponent />
+        <SectionComponent isAdvanced={isAdvanced} setAdvanced={setAdvanced} />
       </div>
     </div>
   )

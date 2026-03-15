@@ -1,5 +1,155 @@
 export const emails = [
   {
+    id: 'email-8',
+    from: { name: 'Atlas Checks', email: 'checks@atlas.ai', initials: 'AT' },
+    to: 'you@firm.co.uk',
+    subject: 'Nexagen Ltd — R&D Tax Report Checker: 2 issues, correction needed',
+    date: '2026-03-08T09:35:00Z',
+    read: false,
+    starred: false,
+    isAtlas: true,
+    type: 'check',
+    preview: '2 critical issues found in R&D_Tax_Claim_FY2025.pdf. Company number auto-corrected. Expenditure mismatch requires attention...',
+    body: `<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #FFFBF5; color: #3C3636; border-radius: 8px; overflow: hidden;">
+  <div style="padding: 24px 32px; border-bottom: 3px solid #c9a84c;">
+    <span style="font-size: 24px; font-weight: 700; color: #c9a84c; letter-spacing: 1px;">Atlas</span>
+    <span style="font-size: 13px; color: #9A8E7E; margin-left: 12px;">Checks Report</span>
+  </div>
+  <div style="padding: 24px 32px;">
+
+    <div style="font-size: 13px; color: #6B6058; line-height: 1.5; margin-bottom: 20px;">
+      <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+        <div><span style="color: #9A8E7E; font-size: 11px;">FILE</span><br/><strong style="color: #1A1412;">R&D_Tax_Claim_FY2025.pdf</strong></div>
+        <div><span style="color: #9A8E7E; font-size: 11px;">SUBMITTED BY</span><br/><strong style="color: #1A1412;">Sophie Clark</strong></div>
+        <div><span style="color: #9A8E7E; font-size: 11px;">CHECKED</span><br/><strong style="color: #1A1412;">8 Mar 2026, 09:32</strong></div>
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 12px; margin-bottom: 24px;">
+      <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 10px 16px; text-align: center; flex: 1;">
+        <div style="font-size: 20px; font-weight: 700; color: #16a34a;">7</div>
+        <div style="font-size: 11px; color: #6B6058;">Passed</div>
+      </div>
+      <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; padding: 10px 16px; text-align: center; flex: 1;">
+        <div style="font-size: 20px; font-weight: 700; color: #d97706;">1</div>
+        <div style="font-size: 11px; color: #6B6058;">Warning</div>
+      </div>
+      <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 10px 16px; text-align: center; flex: 1;">
+        <div style="font-size: 20px; font-weight: 700; color: #dc2626;">2</div>
+        <div style="font-size: 11px; color: #6B6058;">Critical</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 24px;">
+      <div style="font-size: 13px; font-weight: 600; color: #9A8E7E; letter-spacing: 1px; margin-bottom: 12px;">COMPANY DETAILS & STATUS</div>
+
+      <a href="#/app/checks/rev-1" style="display: block; background: #FFFFFF; border: 1px solid #E8E0D4; border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; text-decoration: none; color: inherit;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="color: #16a34a; font-size: 15px;">✓</span>
+          <span style="font-size: 13px; font-weight: 500; color: #1A1412; flex: 1;">Company Name Present & CH Match</span>
+          <span style="background: #d1fae5; color: #065f46; font-size: 11px; padding: 2px 8px; border-radius: 99px; font-weight: 500;">pass</span>
+        </div>
+      </a>
+
+      <a href="#/app/checks/rev-1" style="display: block; background: #FFFFFF; border: 1px solid #fecaca; border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; text-decoration: none; color: inherit;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+          <span style="color: #dc2626; font-size: 15px;">✖</span>
+          <span style="font-size: 13px; font-weight: 500; color: #1A1412; flex: 1;">Company Number Present & Valid</span>
+          <span style="background: #e8d5f5; color: #065f46; font-size: 11px; padding: 2px 8px; border-radius: 99px; font-weight: 500; background: #d1fae5;">auto-corrected</span>
+          <span style="background: #fee2e2; color: #991b1b; font-size: 11px; padding: 2px 8px; border-radius: 99px; font-weight: 600;">critical</span>
+        </div>
+        <div style="font-size: 12px; color: #6B6058; margin-bottom: 8px; padding-left: 23px;">Company number in report does not match Companies House record.</div>
+        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 8px 12px; font-size: 12px; margin-left: 23px;">
+          <span style="color: #6B6058;">Corrected:</span>
+          <span style="color: #dc2626; text-decoration: line-through; margin: 0 4px;">08451293</span>
+          <span style="color: #9A8E7E;">→</span>
+          <span style="color: #16a34a; font-weight: 600; margin-left: 4px;">08451923</span>
+        </div>
+      </a>
+
+      <a href="#/app/checks/rev-1" style="display: block; background: #FFFFFF; border: 1px solid #E8E0D4; border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; text-decoration: none; color: inherit;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="color: #16a34a; font-size: 15px;">✓</span>
+          <span style="font-size: 13px; font-weight: 500; color: #1A1412; flex: 1;">SIC Codes Present & Plausible for R&D</span>
+          <span style="background: #d1fae5; color: #065f46; font-size: 11px; padding: 2px 8px; border-radius: 99px; font-weight: 500;">pass</span>
+        </div>
+      </a>
+
+      <a href="#/app/checks/rev-1" style="display: block; background: #FFFFFF; border: 1px solid #E8E0D4; border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; text-decoration: none; color: inherit;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="color: #16a34a; font-size: 15px;">✓</span>
+          <span style="font-size: 13px; font-weight: 500; color: #1A1412; flex: 1;">Accounting Period(s) Valid</span>
+          <span style="background: #d1fae5; color: #065f46; font-size: 11px; padding: 2px 8px; border-radius: 99px; font-weight: 500;">pass</span>
+        </div>
+      </a>
+
+      <a href="#/app/checks/rev-1" style="display: block; background: #FFFFFF; border: 1px solid #E8E0D4; border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; text-decoration: none; color: inherit;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="color: #16a34a; font-size: 15px;">✓</span>
+          <span style="font-size: 13px; font-weight: 500; color: #1A1412; flex: 1;">Going Concern & CH Status</span>
+          <span style="background: #d1fae5; color: #065f46; font-size: 11px; padding: 2px 8px; border-radius: 99px; font-weight: 500;">pass</span>
+        </div>
+      </a>
+
+      <a href="#/app/checks/rev-1" style="display: block; background: #FFFFFF; border: 1px solid #E8E0D4; border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; text-decoration: none; color: inherit;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="color: #16a34a; font-size: 15px;">✓</span>
+          <span style="font-size: 13px; font-weight: 500; color: #1A1412; flex: 1;">Currently Trading & Not Dormant</span>
+          <span style="background: #d1fae5; color: #065f46; font-size: 11px; padding: 2px 8px; border-radius: 99px; font-weight: 500;">pass</span>
+        </div>
+      </a>
+
+      <a href="#/app/checks/rev-1" style="display: block; background: #FFFFFF; border: 1px solid #fde68a; border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; text-decoration: none; color: inherit;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+          <span style="color: #d97706; font-size: 15px;">⚠</span>
+          <span style="font-size: 13px; font-weight: 500; color: #1A1412; flex: 1;">R&D Relates to Claimant's Trade</span>
+          <span style="background: #ffedd5; color: #9a3412; font-size: 11px; padding: 2px 8px; border-radius: 99px; font-weight: 600;">warning</span>
+        </div>
+        <div style="font-size: 12px; color: #6B6058; padding-left: 23px; margin-bottom: 6px;">One project description lacks explicit link to the company's trade.</div>
+        <div style="background: #FFFBF5; border: 1px solid #E8E0D4; border-radius: 8px; padding: 8px 12px; font-size: 12px; margin-left: 23px; color: #6B6058;">Suggested fix: Strengthen the narrative for Project 3 (AI-assisted literature review tool) to explicitly explain how it advances the company's drug discovery trade.</div>
+      </a>
+    </div>
+
+    <div style="margin-bottom: 24px;">
+      <div style="font-size: 13px; font-weight: 600; color: #9A8E7E; letter-spacing: 1px; margin-bottom: 12px;">FINANCIALS</div>
+
+      <a href="#/app/checks/rev-1" style="display: block; background: #FFFFFF; border: 1px solid #fecaca; border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; text-decoration: none; color: inherit;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+          <span style="color: #dc2626; font-size: 15px;">✖</span>
+          <span style="font-size: 13px; font-weight: 500; color: #1A1412; flex: 1;">R&D Expenditure &lt; Total Company Expenditure</span>
+          <span style="background: #fee2e2; color: #991b1b; font-size: 11px; padding: 2px 8px; border-radius: 99px; font-weight: 600;">critical</span>
+        </div>
+        <div style="font-size: 12px; color: #6B6058; padding-left: 23px; margin-bottom: 6px;">R&D claim (£412,000) exceeds total company expenditure (£380,000) by £32,000.</div>
+        <div style="background: #FFFBF5; border: 1px solid #E8E0D4; border-radius: 8px; padding: 8px 12px; font-size: 12px; margin-left: 23px; color: #6B6058;">Suggested fix: Reconcile R&D expenditure with accounts. Either reduce claim to within total expenditure or verify accounts are complete.</div>
+      </a>
+
+      <a href="#/app/checks/rev-1" style="display: block; background: #FFFFFF; border: 1px solid #E8E0D4; border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; text-decoration: none; color: inherit;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="color: #16a34a; font-size: 15px;">✓</span>
+          <span style="font-size: 13px; font-weight: 500; color: #1A1412; flex: 1;">Expenditure Categories Within Bounds</span>
+          <span style="background: #d1fae5; color: #065f46; font-size: 11px; padding: 2px 8px; border-radius: 99px; font-weight: 500;">pass</span>
+        </div>
+      </a>
+
+      <a href="#/app/checks/rev-1" style="display: block; background: #FFFFFF; border: 1px solid #E8E0D4; border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; text-decoration: none; color: inherit;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="color: #16a34a; font-size: 15px;">✓</span>
+          <span style="font-size: 13px; font-weight: 500; color: #1A1412; flex: 1;">No Public Grants/Subsidies Detected</span>
+          <span style="background: #d1fae5; color: #065f46; font-size: 11px; padding: 2px 8px; border-radius: 99px; font-weight: 500;">pass</span>
+        </div>
+      </a>
+    </div>
+
+    <div style="text-align: center; padding: 8px 0 16px;">
+      <a href="#/app/checks/rev-1" style="display: inline-block; background: #c9a84c; color: #FFFBF5; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px;">View full report in Atlas →</a>
+    </div>
+  </div>
+  <div style="padding: 16px 32px; border-top: 1px solid #E8E0D4; text-align: center;">
+    <span style="font-size: 11px; color: #9A8E7E;">Atlas — Tax Advisory Intelligence</span>
+  </div>
+</div>`,
+  },
+  {
     id: 'email-1',
     from: { name: 'Atlas Signals', email: 'noreply@atlas.ai', initials: 'AT' },
     to: 'you@firm.co.uk',
@@ -252,5 +402,23 @@ export const emails = [
     <span style="font-size: 11px; color: #9A8E7E;">Atlas — Tax Advisory Intelligence</span>
   </div>
 </div>`,
+  },
+];
+
+export const sentEmails = [
+  {
+    id: 'email-sent-1',
+    from: { name: 'You', email: 'you@firm.co.uk', initials: 'YO' },
+    to: 'view@atlas.claimer.com',
+    subject: '(no subject)',
+    date: '2026-03-08T09:30:00Z',
+    read: true,
+    starred: false,
+    isAtlas: false,
+    type: 'sent',
+    folder: 'sent',
+    preview: '',
+    attachments: [{ name: 'R&D_Tax_Claim_FY2025.pdf', size: '2.4 MB', type: 'pdf' }],
+    body: '',
   },
 ];
