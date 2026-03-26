@@ -3,10 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const STEPS = [
-  'Connecting email...',
-  'Analysing communications...',
-  'Building knowledge graph...',
-  'Activating sensors...',
+  'Connecting to Companies House...',
+  'Analysing report...',
+  'Running checks...',
   'Ready!',
 ]
 
@@ -18,7 +17,7 @@ export default function Processing() {
     const timers = STEPS.map((_, i) =>
       setTimeout(() => setCompletedIndex(i), (i + 1) * 700),
     )
-    const redirect = setTimeout(() => navigate('/email'), 4000)
+    const redirect = setTimeout(() => navigate('/app/checks'), 4000)
     return () => {
       timers.forEach(clearTimeout)
       clearTimeout(redirect)
@@ -45,7 +44,7 @@ export default function Processing() {
       </div>
 
       <h1 className="font-serif text-2xl text-nearblack mb-8">
-        Setting up your intelligence layer...
+        Preparing your checks...
       </h1>
 
       <div className="w-full max-w-sm space-y-3">

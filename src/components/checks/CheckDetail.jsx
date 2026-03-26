@@ -1,13 +1,15 @@
-import { useState } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { fileReviews, checkCategories, timeAgo, legislationRefs } from '../../data/checks'
-import { documentContent } from '../../data/document-content'
+import { documentContent, getReviewDocuments, ct600Content, taxCompContent, workingPapersData } from '../../data/document-content'
 import { entities } from '../../data/entities'
 import { Badge } from '../ui/Badge'
 import { cn } from '../../lib/cn'
-import { DocumentPreview } from './DocumentPreview'
+import { DocumentTabs } from './DocumentTabs'
 import { SubCheckRow } from './SubCheckRow'
 import { LegislationPanel } from './LegislationPanel'
+import { ReportFeedback } from './ReportFeedback'
+import { CheckFeedback } from './CheckFeedback'
 
 const statusIcon = {
   pass: <span className="text-emerald-600">✓</span>,
@@ -23,8 +25,33 @@ export default function CheckDetail() {
   const [collapsedCategories, setCollapsedCategories] = useState(new Set())
   const [expandedChecks, setExpandedChecks] = useState(new Set())
   const [activeSubCheck, setActiveSubCheck] = useState(null)
+  const [activeDocTab, setActiveDocTab] = useState('rnd-report')
   const [legislationPanel, setLegislationPanel] = useState(null)
-  const [docPreviewOpen, setDocPreviewOpen] = useState(false)
+  const [docPanelWidth, setDocPanelWidth] = useState(40)
+  const [isDragging, setIsDragging] = useState(false)
+
+  const handleDragStart = useCallback((e) => {
+    e.preventDefault()
+    setIsDragging(true)
+  }, [])
+
+  useEffect(() => {
+    if (!isDragging) return
+    const handleMove = (e) => {
+      const container = document.querySelector('[data-check-layout]')
+      if (!container) return
+      const rect = container.getBoundingClientRect()
+      const rightPct = ((rect.right - e.clientX) / rect.width) * 100
+      setDocPanelWidth(Math.min(75, Math.max(25, rightPct)))
+    }
+    const handleUp = () => setIsDragging(false)
+    document.addEventListener('mousemove', handleMove)
+    document.addEventListener('mouseup', handleUp)
+    return () => {
+      document.removeEventListener('mousemove', handleMove)
+      document.removeEventListener('mouseup', handleUp)
+    }
+  }, [isDragging])
 
   if (!review) {
     return (
@@ -100,38 +127,13 @@ export default function CheckDetail() {
       </div>
 
       {/* Two-column layout */}
-      <div className="flex flex-col lg:flex-row gap-6 flex-1 min-h-0">
+      <div className="relative flex-1 min-h-0" data-check-layout>
 
-        {/* Left column — document preview */}
-        <div className="lg:w-[40%] lg:overflow-y-auto">
-          {/* Mobile toggle */}
-          <button
-            onClick={() => setDocPreviewOpen(prev => !prev)}
-            className="lg:hidden flex items-center gap-2 w-full text-left text-sm font-medium text-charcoal/70 hover:text-charcoal transition-colors mb-4"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className={cn('w-4 h-4 transition-transform', docPreviewOpen && 'rotate-90')}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-            </svg>
-            {docPreviewOpen ? 'Hide document preview' : 'Show document preview'}
-          </button>
-
-          {/* Desktop: always show. Mobile: toggle. */}
-          <div className={cn('lg:block', docPreviewOpen ? 'block' : 'hidden')}>
-            {doc && (
-              <DocumentPreview document={doc} activeSubCheck={activeSubCheck} />
-            )}
-          </div>
-        </div>
-
-        {/* Right column — checks */}
-        <div className="lg:w-[60%] lg:overflow-y-auto space-y-6">
+        {/* Left column — checks */}
+        <div
+          className="absolute inset-y-0 left-0 overflow-y-auto space-y-6 pr-3"
+          style={{ width: `calc(${100 - docPanelWidth}% - 4px)` }}
+        >
 
           {/* Routing card */}
           <div className={cn(
@@ -157,7 +159,8 @@ export default function CheckDetail() {
           </div>
 
           {/* Category groups */}
-          {grouped.map(cat => {
+          {/* Category groups */}
+          {grouped.filter(cat => cat.checks.length > 0).map(cat => {
             const isCollapsed = collapsedCategories.has(cat.id)
             return (
               <div key={cat.id} className="space-y-3">
@@ -255,7 +258,11 @@ export default function CheckDetail() {
                                         key={sc.id}
                                         subCheck={sc}
                                         isActive={activeSubCheck?.id === sc.id}
-                                        onClick={() => setActiveSubCheck(activeSubCheck?.id === sc.id ? null : sc)}
+                                        onClick={() => {
+                                          const next = activeSubCheck?.id === sc.id ? null : sc
+                                          setActiveSubCheck(next)
+                                          if (next?.evidenceType === 'document_field') setActiveDocTab('rnd-report')
+                                        }}
                                       />
                                     ))}
                                   </div>
@@ -291,6 +298,8 @@ export default function CheckDetail() {
                                   )}
                                 </div>
                               )}
+
+                              <CheckFeedback />
                             </div>
                           )}
                         </div>
@@ -301,6 +310,41 @@ export default function CheckDetail() {
               </div>
             )
           })}
+
+          {/* Report-level feedback */}
+          <ReportFeedback />
+        </div>
+
+        {/* Resize handle */}
+        <div
+          onMouseDown={handleDragStart}
+          className={cn(
+            'absolute inset-y-0 hidden lg:flex w-2 cursor-col-resize items-center justify-center group z-10',
+            isDragging && 'select-none'
+          )}
+          style={{ left: `calc(${100 - docPanelWidth}% - 4px)` }}
+        >
+          <div className={cn(
+            'w-0.5 h-8 rounded-full transition-colors',
+            isDragging ? 'bg-gold' : 'bg-warmgrey/30 group-hover:bg-gold/50'
+          )} />
+        </div>
+
+        {/* Right column — document panel */}
+        <div
+          className="absolute inset-y-0 right-0 overflow-hidden pl-1"
+          style={{ width: `calc(${docPanelWidth}% - 4px)` }}
+        >
+          <DocumentTabs
+            tabs={getReviewDocuments(entity?.name || 'Unknown')}
+            document={doc}
+            activeSubCheck={activeSubCheck}
+            activeTab={activeDocTab}
+            onTabChange={setActiveDocTab}
+            ct600Content={ct600Content}
+            taxCompContent={taxCompContent}
+            workingPapersData={workingPapersData}
+          />
         </div>
       </div>
 

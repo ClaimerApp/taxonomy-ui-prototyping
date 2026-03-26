@@ -4,6 +4,7 @@ import OnboardingPage from './pages/OnboardingPage'
 import MvpOnboardingPage from './pages/MvpOnboardingPage'
 import EmailPage from './pages/EmailPage'
 import AppPage from './pages/AppPage'
+import LoginPage from './pages/LoginPage'
 
 export default function App() {
   return (
@@ -13,9 +14,9 @@ export default function App() {
       <Route path="/onboarding/admin/:step" element={<OnboardingPage />} />
       <Route path="/onboarding/user/:step" element={<OnboardingPage />} />
       <Route path="/onboarding/processing" element={<OnboardingPage />} />
+      <Route path="/login" element={<LoginPage />} />
       <Route path="/mvp-onboarding/login" element={<MvpOnboardingPage />} />
-      <Route path="/mvp-onboarding/admin/:step" element={<MvpOnboardingPage />} />
-      <Route path="/mvp-onboarding/user/:step" element={<MvpOnboardingPage />} />
+      <Route path="/mvp-onboarding/user/1" element={<MvpOnboardingPage />} />
       <Route path="/mvp-onboarding/processing" element={<MvpOnboardingPage />} />
       <Route path="/email" element={<EmailPage />} />
       <Route path="/email/sent" element={<EmailPage />} />
@@ -34,6 +35,8 @@ export default function App() {
       <Route path="/app/settings/data-sources" element={<AppPage />} />
       <Route path="/app/settings/alerts" element={<AppPage />} />
       <Route path="/app/settings/checkers" element={<AppPage />} />
+      <Route path="/app/settings/users" element={<AppPage />} />
+      <Route path="/app/settings/auth" element={<AppPage />} />
       <Route path="/app/settings/demo" element={<AppPage />} />
     </Routes>
   )
