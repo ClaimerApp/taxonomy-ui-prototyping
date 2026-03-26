@@ -8,7 +8,10 @@ import { SensorCard } from '../config/SensorCard'
 import { interceptors } from '../../data/interceptors'
 import { InterceptorCard } from '../config/InterceptorCard'
 import { checkers, checkCategories, checkDefinitions } from '../../data/checks'
+import { initialUsers } from '../../data/users'
 import { useDemoSettings } from '../../contexts/DemoSettingsContext'
+import { Button } from '../ui/Button'
+import { Input } from '../ui/Input'
 
 const settingsNav = [
   {
@@ -17,6 +20,24 @@ const settingsNav = [
     icon: (
       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.745 3.745 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
+      </svg>
+    ),
+  },
+  {
+    label: 'Users',
+    to: '/app/settings/users',
+    icon: (
+      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+      </svg>
+    ),
+  },
+  {
+    label: 'Authentication',
+    to: '/app/settings/auth',
+    icon: (
+      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
       </svg>
     ),
   },
@@ -324,6 +345,148 @@ function DemoSettingsSection({ isAdvanced, setAdvanced }) {
   )
 }
 
+function UsersSection() {
+  const [users, setUsers] = useState(initialUsers)
+  const [inviteEmail, setInviteEmail] = useState('')
+
+  const addInvite = () => {
+    if (!inviteEmail.trim() || users.some(u => u.email === inviteEmail.trim())) return
+    setUsers(prev => [...prev, {
+      id: `user-${Date.now()}`,
+      name: inviteEmail.split('@')[0].replace(/[._]/g, ' '),
+      email: inviteEmail.trim(),
+      role: 'user',
+      status: 'pending',
+      joinedAt: null,
+    }])
+    setInviteEmail('')
+  }
+
+  const removeUser = (id) => setUsers(prev => prev.filter(u => u.id !== id))
+
+  const toggleAdmin = (id) => {
+    setUsers(prev => prev.map(u =>
+      u.id === id ? { ...u, role: u.role === 'admin' ? 'user' : 'admin' } : u
+    ))
+  }
+
+  return (
+    <div className="max-w-2xl space-y-6">
+      <div>
+        <h2 className="font-serif text-xl font-bold text-nearblack">Users</h2>
+        <p className="text-sm text-warmgrey mt-1">Manage who has access to Atlas for your firm</p>
+      </div>
+
+      {/* Invite form */}
+      <Card className="p-4">
+        <p className="text-sm font-medium text-nearblack mb-3">Invite a colleague</p>
+        <div className="flex gap-2">
+          <Input
+            placeholder="colleague@firm.co.uk"
+            type="email"
+            value={inviteEmail}
+            onChange={e => setInviteEmail(e.target.value)}
+            className="flex-1"
+          />
+          <Button onClick={addInvite} size="sm" disabled={!inviteEmail.trim()}>
+            Send invite
+          </Button>
+        </div>
+      </Card>
+
+      {/* User list */}
+      <div className="space-y-2">
+        {users.map((user, i) => (
+          <motion.div
+            key={user.id}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 + i * 0.04, duration: 0.3 }}
+          >
+            <Card className="p-4 flex items-center gap-4">
+              <div className="w-9 h-9 rounded-full bg-gold/15 flex items-center justify-center text-sm font-medium text-darkgold shrink-0">
+                {user.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-nearblack">{user.name}</span>
+                  {user.role === 'admin' && (
+                    <span className="px-1.5 py-0.5 text-[10px] font-medium rounded bg-gold/15 text-darkgold">Admin</span>
+                  )}
+                  {user.status === 'pending' && (
+                    <span className="px-1.5 py-0.5 text-[10px] font-medium rounded bg-warmgrey/15 text-charcoal/50">Pending</span>
+                  )}
+                </div>
+                <div className="text-xs text-charcoal/50 mt-0.5">{user.email}</div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                {user.status === 'active' && user.id !== 'user-1' && (
+                  <button
+                    onClick={() => toggleAdmin(user.id)}
+                    className="text-xs text-charcoal/50 hover:text-nearblack transition-colors"
+                  >
+                    {user.role === 'admin' ? 'Remove admin' : 'Make admin'}
+                  </button>
+                )}
+                {user.id !== 'user-1' && (
+                  <button
+                    onClick={() => removeUser(user.id)}
+                    className="text-xs text-red-500 hover:text-red-700 transition-colors"
+                  >
+                    {user.status === 'pending' ? 'Cancel' : 'Remove'}
+                  </button>
+                )}
+              </div>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function AuthenticationSection() {
+  const [mssoEnabled, setMssoEnabled] = useState(false)
+
+  return (
+    <div className="max-w-2xl space-y-6">
+      <div>
+        <h2 className="font-serif text-xl font-bold text-nearblack">Authentication</h2>
+        <p className="text-sm text-warmgrey mt-1">Configure how users sign in to Atlas</p>
+      </div>
+
+      <Card className="p-4 flex items-center justify-between gap-4">
+        <div className="min-w-0">
+          <div className="text-sm font-medium text-nearblack">Magic link (email)</div>
+          <div className="text-xs text-charcoal/50 mt-0.5">Users receive a sign-in link via email. Enabled by default.</div>
+        </div>
+        <Toggle enabled={true} onToggle={() => {}} />
+      </Card>
+
+      <Card className="p-4 space-y-3">
+        <div className="flex items-center justify-between gap-4">
+          <div className="min-w-0">
+            <div className="text-sm font-medium text-nearblack">Microsoft Single Sign-On</div>
+            <div className="text-xs text-charcoal/50 mt-0.5">Allow users to sign in with their Microsoft 365 account</div>
+          </div>
+          <Toggle enabled={mssoEnabled} onToggle={() => setMssoEnabled(!mssoEnabled)} />
+        </div>
+        <div className="flex items-start gap-2 bg-blue-50 border border-blue-200 rounded-lg p-3">
+          <svg className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <p className="text-xs text-blue-700">Enabling Microsoft SSO may require approval from your organisation's IT administrator.</p>
+        </div>
+      </Card>
+
+      <Card className="p-4">
+        <div className="text-sm font-medium text-nearblack">Session duration</div>
+        <div className="text-xs text-charcoal/50 mt-1">User sessions expire after <strong>24 hours</strong> for security. Users will be redirected to the login page after expiry.</div>
+      </Card>
+    </div>
+  )
+}
+
 // --- Main settings layout ---
 
 const sectionMap = {
@@ -332,10 +495,12 @@ const sectionMap = {
   'data-sources': DataSourcesSection,
   alerts: AlertDeliverySection,
   checkers: CheckersSection,
+  users: UsersSection,
+  auth: AuthenticationSection,
   demo: DemoSettingsSection,
 }
 
-const advancedOnlyLabels = ['Sensors', 'Interceptors', 'Alert Delivery']
+const advancedOnlyLabels = ['Sensors', 'Interceptors', 'Data Sources', 'Alert Delivery']
 
 export function SettingsPage({ section }) {
   const { pathname } = useLocation()
