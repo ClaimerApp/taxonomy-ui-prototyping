@@ -167,8 +167,15 @@ ${emailFooter}`,
 
     ${fileMeta}
 
-    <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #92400e; margin-bottom: 20px;">
-      <strong>Basic report</strong> — based on your R&D report only. Reply with additional files below for a comprehensive cross-check.
+    <div style="background: #FFFFFF; border: 2px solid #c9a84c; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+      <div style="font-size: 15px; font-weight: 600; color: #1A1412; margin-bottom: 8px;">Want a deeper review?</div>
+      <div style="font-size: 13px; color: #6B6058; margin-bottom: 16px;">Reply to this email with any of the following files and we'll cross-reference them against your R&D report for a more comprehensive check:</div>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <span style="background: #F5F0E8; border: 1px solid #E8E0D4; border-radius: 6px; padding: 6px 12px; font-size: 12px; color: #3C3636; font-weight: 500;">CT600 Tax Return</span>
+        <span style="background: #F5F0E8; border: 1px solid #E8E0D4; border-radius: 6px; padding: 6px 12px; font-size: 12px; color: #3C3636; font-weight: 500;">Tax computations</span>
+        <span style="background: #F5F0E8; border: 1px solid #E8E0D4; border-radius: 6px; padding: 6px 12px; font-size: 12px; color: #3C3636; font-weight: 500;">Full Accounts</span>
+        <span style="background: #F5F0E8; border: 1px solid #E8E0D4; border-radius: 6px; padding: 6px 12px; font-size: 12px; color: #3C3636; font-weight: 500;">Working papers / costings</span>
+      </div>
     </div>
 
     <div style="display: flex; gap: 12px; margin-bottom: 24px;">
@@ -212,17 +219,6 @@ ${emailFooter}`,
       <a href="#/app/checks/rev-1" style="display: inline-block; background: #c9a84c; color: #FFFBF5; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px;">View basic report in Atlas →</a>
     </div>
 
-    <div style="background: #FFFFFF; border: 2px solid #c9a84c; border-radius: 12px; padding: 20px; margin-bottom: 16px;">
-      <div style="font-size: 15px; font-weight: 600; color: #1A1412; margin-bottom: 8px;">Want a deeper report?</div>
-      <div style="font-size: 13px; color: #6B6058; margin-bottom: 16px;">Reply to this email with any of the following files and we'll cross-reference them against your R&D report for a comprehensive check:</div>
-      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-        <span style="background: #F5F0E8; border: 1px solid #E8E0D4; border-radius: 6px; padding: 6px 12px; font-size: 12px; color: #3C3636; font-weight: 500;">CT600</span>
-        <span style="background: #F5F0E8; border: 1px solid #E8E0D4; border-radius: 6px; padding: 6px 12px; font-size: 12px; color: #3C3636; font-weight: 500;">Tax computations</span>
-        <span style="background: #F5F0E8; border: 1px solid #E8E0D4; border-radius: 6px; padding: 6px 12px; font-size: 12px; color: #3C3636; font-weight: 500;">Management accounts</span>
-        <span style="background: #F5F0E8; border: 1px solid #E8E0D4; border-radius: 6px; padding: 6px 12px; font-size: 12px; color: #3C3636; font-weight: 500;">Working papers / costings</span>
-      </div>
-    </div>
-
 ${emailFooter}`,
   },
 
@@ -241,6 +237,13 @@ ${emailFooter}`,
     body: `${emailHeader('Checks Report')}
 
     ${fileMeta}
+
+    <div style="background: linear-gradient(135deg, #1A1412, #3C3636); border-radius: 12px; padding: 24px; margin-bottom: 24px; text-align: center;">
+      <div style="font-size: 17px; font-weight: 600; color: #FFFBF5; margin-bottom: 8px;">Want a deeper review?</div>
+      <div style="font-size: 13px; color: #C4B8A8; margin-bottom: 16px; line-height: 1.6;">Unlock more comprehensive financial cross-checks, expenditure analysis, scheme eligibility, and technical narrative review by signing up to Atlas.</div>
+      <a href="#/mvp-onboarding/login?user=demo" style="display: inline-block; background: #FFC832; color: #1A1412; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 14px;">See the full report →</a>
+      <div style="font-size: 11px; color: #E8DFCE; margin-top: 12px;">Free to use · Covered by your existing Claimer agreement · Takes 10 seconds</div>
+    </div>
 
     <div style="display: flex; gap: 12px; margin-bottom: 24px;">
       <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 10px 16px; text-align: center; flex: 1;">
@@ -279,69 +282,7 @@ ${emailFooter}`,
       ${checkPass('Currently Trading & Not Dormant')}
     </div>
 
-    <div style="background: linear-gradient(135deg, #1A1412, #3C3636); border-radius: 12px; padding: 24px; margin-bottom: 16px; text-align: center;">
-      <div style="font-size: 17px; font-weight: 600; color: #FFFBF5; margin-bottom: 8px;">Want deeper checks?</div>
-      <div style="font-size: 13px; color: #C4B8A8; margin-bottom: 16px; line-height: 1.6;">Sign up for Atlas to unlock financial cross-checks, expenditure analysis, scheme eligibility, and technical narrative review — all in a detailed web dashboard.</div>
-      <a href="#/mvp-onboarding/login?user=demo" style="display: inline-block; background: #FFC832; color: #1A1412; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 14px;">Sign up to see full report →</a>
-      <div style="font-size: 11px; color: #6B6058; margin-top: 12px;">Free to use · Same security as Claimer · Takes 30 seconds</div>
-    </div>
-
 ${emailFooter}`,
-  },
-
-  // ── Type 4: Cold-submission rejection — no R&D report in bundle (TAX-699) ──
-  {
-    id: 'email-rejection-no-rd',
-    from: { name: 'Atlas Checks', email: 'checks@atlas.ai', initials: 'AT' },
-    to: 'advisor@example.co.uk',
-    subject: 'Re: CT600 submission — R&D report required',
-    date: '2026-03-07T17:45:00Z',
-    read: false,
-    starred: false,
-    isAtlas: true,
-    type: 'rejection',
-    preview: "We can only run checks on a CT600 when it's submitted alongside the corresponding R&D report. We didn't find an R&D report in this bundle...",
-    body: `${emailHeader('Submission not processed')}
-
-    ${rejectionParagraph('Hi,')}
-
-    ${rejectionParagraph('Thanks for sending this through to Atlas.')}
-
-    ${rejectionParagraph("We can only run checks on a CT600 when it's submitted alongside the corresponding R&D report. We didn't find an R&D report in this bundle, so we haven't run any checks yet.")}
-
-    ${rejectionInstructionCard('TO FIX THIS', 'Reply to this email with both files attached:', [
-      'The R&D technical report (PDF)',
-      'The CT600 return (PDF)',
-    ])}
-
-    ${rejectionParagraph("Once we receive both together, we'll run the full set of checks and reply within a few minutes.")}
-
-    <p style="font-size: 13px; color: #6B6058; line-height: 1.6; margin: 0 0 16px;">If you meant to send something else, or you don't have an R&D report for this claim, just ignore this email.</p>
-
-    ${rejectionSignOff}
-
-${emailFooter}`,
-    bodyPlaintext: `Hi,
-
-Thanks for sending this through to Atlas.
-
-We can only run checks on a CT600 when it's submitted alongside the
-corresponding R&D report. We didn't find an R&D report in this bundle,
-so we haven't run any checks yet.
-
-To fix this, reply to this email with both files attached:
-
-  • The R&D technical report (PDF)
-  • The CT600 return (PDF)
-
-Once we receive both together, we'll run the full set of checks and
-reply within a few minutes.
-
-If you meant to send something else, or you don't have an R&D report
-for this claim, just ignore this email.
-
-— The Atlas team
-`,
   },
 
   // ── Type 5: Cold-submission rejection — supporting docs without R&D report (TAX-699) ──
