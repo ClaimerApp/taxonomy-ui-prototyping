@@ -59,16 +59,16 @@ export const emails = [
   // ── Type 3: Full check report (most recent — user replied with files) ──
   {
     id: 'email-check-full',
-    from: { name: 'Atlas Checks', email: 'checks@atlas.ai', initials: 'AT' },
+    from: { name: 'Atlas Reviews', email: 'reviews@atlas.ai', initials: 'AT' },
     to: 'you@firm.co.uk',
-    subject: 'Nexagen Ltd — Full R&D Report Check: 2 issues, correction needed',
+    subject: 'Nexagen Ltd — Full R&D Report Review: 2 issues, correction needed',
     date: '2026-03-08T11:15:00Z',
     read: false,
     starred: false,
     isAtlas: true,
     type: 'check',
-    preview: 'Full check complete across 4 files. 2 critical issues found: company number mismatch (auto-corrected), expenditure exceeds total...',
-    body: `${emailHeader('Full Checks Report')}
+    preview: 'Full review complete across 4 files. 2 critical issues found: company number mismatch (auto-corrected), expenditure exceeds total...',
+    body: `${emailHeader('Full Review Report')}
 
     ${fileMeta}
 
@@ -154,16 +154,16 @@ ${emailFooter}`,
   // ── Type 2: AIF basic checks — signed-up user, first time seeing file ──
   {
     id: 'email-check-basic',
-    from: { name: 'Atlas Checks', email: 'checks@atlas.ai', initials: 'AT' },
+    from: { name: 'Atlas Reviews', email: 'reviews@atlas.ai', initials: 'AT' },
     to: 'you@firm.co.uk',
-    subject: 'Nexagen Ltd — R&D Report: basic checks complete',
+    subject: 'Nexagen Ltd — R&D Report: basic review complete',
     date: '2026-03-08T09:35:00Z',
     read: false,
     starred: false,
     isAtlas: true,
     type: 'check',
-    preview: 'Basic checks on R&D_Tax_Claim_FY2025.pdf. Company number mismatch found. Reply with additional files for a deeper report...',
-    body: `${emailHeader('Basic Checks')}
+    preview: 'Basic review on R&D_Tax_Claim_FY2025.pdf. Company number mismatch found. Reply with additional files for a deeper report...',
+    body: `${emailHeader('Basic Review')}
 
     ${fileMeta}
 
@@ -225,16 +225,16 @@ ${emailFooter}`,
   // ── Type 1: AIF basic checks — non-signed-up user ──
   {
     id: 'email-check-aif',
-    from: { name: 'Atlas Checks', email: 'checks@atlas.ai', initials: 'AT' },
+    from: { name: 'Atlas Reviews', email: 'reviews@atlas.ai', initials: 'AT' },
     to: 'advisor@example.co.uk',
-    subject: 'Nexagen Ltd — R&D Report Check: 1 issue found',
+    subject: 'Nexagen Ltd — R&D Report Review: 1 issue found',
     date: '2026-03-08T09:35:00Z',
     read: false,
     starred: false,
     isAtlas: true,
     type: 'check',
-    preview: 'We checked the R&D report submitted with the AIF for Nexagen Ltd. Company number mismatch detected...',
-    body: `${emailHeader('Checks Report')}
+    preview: 'We reviewed the R&D report submitted with the AIF for Nexagen Ltd. Company number mismatch detected...',
+    body: `${emailHeader('Review Report')}
 
     ${fileMeta}
 
@@ -288,7 +288,7 @@ ${emailFooter}`,
   // ── Type 5: Cold-submission rejection — supporting docs without R&D report (TAX-699) ──
   {
     id: 'email-rejection-supporting-docs',
-    from: { name: 'Atlas Checks', email: 'checks@atlas.ai', initials: 'AT' },
+    from: { name: 'Atlas Reviews', email: 'reviews@atlas.ai', initials: 'AT' },
     to: 'advisor@example.co.uk',
     subject: 'Unsuccessful submission',
     date: '2026-03-07T16:10:00Z',
@@ -450,7 +450,7 @@ export const sentEmails = [
     id: 'email-sent-2',
     from: { name: 'You', email: 'you@firm.co.uk', initials: 'YO' },
     to: 'review@atlas.claimer.com',
-    subject: 'RE: Nexagen Ltd — R&D Report: basic checks complete',
+    subject: 'RE: Nexagen Ltd — R&D Report: basic review complete',
     date: '2026-03-08T10:45:00Z',
     read: true,
     starred: false,
