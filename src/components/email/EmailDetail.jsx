@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { cn } from '../../lib/cn'
 
 const formatDate = (dateStr) =>
@@ -43,6 +44,12 @@ const fileTypeIcon = (type) => {
 }
 
 export default function EmailDetail({ email }) {
+  const [format, setFormat] = useState('html')
+
+  useEffect(() => {
+    setFormat('html')
+  }, [email?.id])
+
   if (!email) {
     return (
       <div className="flex items-center justify-center h-full text-slate-400 text-sm">
@@ -52,14 +59,45 @@ export default function EmailDetail({ email }) {
   }
 
   const isSent = email.folder === 'sent'
+  const hasPlaintext = Boolean(email.bodyPlaintext)
 
   return (
     <div className="h-full overflow-y-auto p-6">
       <div className="max-w-3xl mx-auto">
-        {/* Subject */}
-        <h1 className="text-xl font-semibold text-slate-900 mb-4" style={{ fontFamily: "'Segoe UI', -apple-system, sans-serif" }}>
-          {email.subject}
-        </h1>
+        {/* Subject + format switcher */}
+        <div className="flex items-start justify-between gap-4 mb-4">
+          <h1 className="text-xl font-semibold text-slate-900 flex-1" style={{ fontFamily: "'Segoe UI', -apple-system, sans-serif" }}>
+            {email.subject}
+          </h1>
+          {hasPlaintext && (
+            <div
+              className="shrink-0 inline-flex items-center rounded-md border border-slate-200 bg-slate-50 p-0.5 text-xs"
+              style={{ fontFamily: "'Segoe UI', -apple-system, sans-serif" }}
+              role="group"
+              aria-label="Email format"
+            >
+              {[
+                { id: 'html', label: 'HTML' },
+                { id: 'plaintext', label: 'Plain text' },
+              ].map((opt) => (
+                <button
+                  key={opt.id}
+                  type="button"
+                  onClick={() => setFormat(opt.id)}
+                  aria-pressed={format === opt.id}
+                  className={cn(
+                    'px-2.5 py-1 rounded transition-colors',
+                    format === opt.id
+                      ? 'bg-white text-slate-900 shadow-sm font-medium'
+                      : 'text-slate-500 hover:text-slate-700'
+                  )}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
 
         {isSent ? (
           /* Sent email header — Outlook style */
@@ -129,7 +167,11 @@ export default function EmailDetail({ email }) {
         )}
 
         {/* Body */}
-        {email.body ? (
+        {hasPlaintext && format === 'plaintext' ? (
+          <pre className="whitespace-pre-wrap break-words font-mono text-[13px] leading-relaxed text-slate-800 bg-slate-50 border border-slate-200 rounded-md p-4 mt-2">
+            {email.bodyPlaintext}
+          </pre>
+        ) : email.body ? (
           <div
             className="prose prose-slate prose-sm max-w-none [&_a]:text-amber-600 [&_a]:no-underline hover:[&_a]:underline"
             dangerouslySetInnerHTML={{ __html: email.body }}

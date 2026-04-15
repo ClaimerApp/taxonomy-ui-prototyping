@@ -39,6 +39,19 @@ const checkPassLink = (name, href) => `<a href="${href}" style="display: block; 
         </div>
       </a>`
 
+// Rejection email building blocks
+const rejectionParagraph = (text) => `<p style="font-size: 15px; color: #3C3636; line-height: 1.6; margin: 0 0 16px;">${text}</p>`
+
+const rejectionInstructionCard = (heading, intro, items) => `<div style="background: #FFFFFF; border: 1px solid #E8E0D4; border-radius: 12px; padding: 16px 20px; margin: 0 0 20px;">
+      <div style="font-size: 11px; font-weight: 600; color: #9A8E7E; letter-spacing: 1px; margin-bottom: 10px;">${heading}</div>
+      <p style="font-size: 14px; color: #3C3636; line-height: 1.6; margin: 0 0 10px;">${intro}</p>
+      <ul style="font-size: 14px; color: #3C3636; line-height: 1.8; margin: 0; padding-left: 22px; list-style-type: disc; list-style-position: outside;">
+        ${items.map((item) => `<li style="padding-left: 4px;">${item}</li>`).join('\n        ')}
+      </ul>
+    </div>`
+
+const rejectionSignOff = `<p style="font-size: 15px; color: #3C3636; line-height: 1.6; margin: 24px 0 0;">— The Atlas team</p>`
+
 // ──────────────────────────────────────────
 // Inbox emails
 // ──────────────────────────────────────────
@@ -220,7 +233,7 @@ ${emailFooter}`,
     to: 'advisor@example.co.uk',
     subject: 'Nexagen Ltd — R&D Report Check: 1 issue found',
     date: '2026-03-08T09:35:00Z',
-    read: true,
+    read: false,
     starred: false,
     isAtlas: true,
     type: 'check',
@@ -274,6 +287,120 @@ ${emailFooter}`,
     </div>
 
 ${emailFooter}`,
+  },
+
+  // ── Type 4: Cold-submission rejection — no R&D report in bundle (TAX-699) ──
+  {
+    id: 'email-rejection-no-rd',
+    from: { name: 'Atlas Checks', email: 'checks@atlas.ai', initials: 'AT' },
+    to: 'advisor@example.co.uk',
+    subject: 'Re: CT600 submission — R&D report required',
+    date: '2026-03-07T17:45:00Z',
+    read: false,
+    starred: false,
+    isAtlas: true,
+    type: 'rejection',
+    preview: "We can only run checks on a CT600 when it's submitted alongside the corresponding R&D report. We didn't find an R&D report in this bundle...",
+    body: `${emailHeader('Submission not processed')}
+
+    ${rejectionParagraph('Hi,')}
+
+    ${rejectionParagraph('Thanks for sending this through to Atlas.')}
+
+    ${rejectionParagraph("We can only run checks on a CT600 when it's submitted alongside the corresponding R&D report. We didn't find an R&D report in this bundle, so we haven't run any checks yet.")}
+
+    ${rejectionInstructionCard('TO FIX THIS', 'Reply to this email with both files attached:', [
+      'The R&D technical report (PDF)',
+      'The CT600 return (PDF)',
+    ])}
+
+    ${rejectionParagraph("Once we receive both together, we'll run the full set of checks and reply within a few minutes.")}
+
+    <p style="font-size: 13px; color: #6B6058; line-height: 1.6; margin: 0 0 16px;">If you meant to send something else, or you don't have an R&D report for this claim, just ignore this email.</p>
+
+    ${rejectionSignOff}
+
+${emailFooter}`,
+    bodyPlaintext: `Hi,
+
+Thanks for sending this through to Atlas.
+
+We can only run checks on a CT600 when it's submitted alongside the
+corresponding R&D report. We didn't find an R&D report in this bundle,
+so we haven't run any checks yet.
+
+To fix this, reply to this email with both files attached:
+
+  • The R&D technical report (PDF)
+  • The CT600 return (PDF)
+
+Once we receive both together, we'll run the full set of checks and
+reply within a few minutes.
+
+If you meant to send something else, or you don't have an R&D report
+for this claim, just ignore this email.
+
+— The Atlas team
+`,
+  },
+
+  // ── Type 5: Cold-submission rejection — supporting docs without R&D report (TAX-699) ──
+  {
+    id: 'email-rejection-supporting-docs',
+    from: { name: 'Atlas Checks', email: 'checks@atlas.ai', initials: 'AT' },
+    to: 'advisor@example.co.uk',
+    subject: 'Unsuccessful submission',
+    date: '2026-03-07T16:10:00Z',
+    read: false,
+    starred: false,
+    isAtlas: true,
+    type: 'rejection',
+    preview: 'Sorry, your submission could not be processed for checks. We only received supporting documents; checks require the R&D report too...',
+    body: `${emailHeader('Submission not processed')}
+
+    ${rejectionParagraph('Hi {firstname},')}
+
+    ${rejectionParagraph('Sorry, your submission could not be processed for checks.')}
+
+    <div style="background: #FFFFFF; border: 1px solid #E8E0D4; border-radius: 12px; padding: 18px 22px; margin: 0 0 20px;">
+      <div style="font-size: 11px; font-weight: 600; color: #9A8E7E; letter-spacing: 1px; margin-bottom: 10px;">WHAT HAPPENED</div>
+      <p style="font-size: 14px; color: #3C3636; line-height: 1.6; margin: 0 0 22px;"><strong style="font-weight: 600; color: #1A1412;">We only received supporting documents; checks require the R&D report too.</strong> The supporting documents on their own aren't enough for us to check anything.</p>
+
+      <div style="font-size: 11px; font-weight: 600; color: #9A8E7E; letter-spacing: 1px; margin-bottom: 10px;">HOW TO FIX THIS</div>
+      <p style="font-size: 14px; color: #3C3636; line-height: 1.6; margin: 0 0 10px;">Reply to this email and attach your R&D report alongside any supporting documents in a single email:</p>
+      <ul style="font-size: 14px; color: #3C3636; line-height: 1.8; margin: 0; padding-left: 22px; list-style-type: disc; list-style-position: outside;">
+        <li style="padding-left: 4px;">CT600 Tax Return (PDF)</li>
+        <li style="padding-left: 4px;">Tax Computations (PDF)</li>
+        <li style="padding-left: 4px;">Full Accounts (PDF)</li>
+        <li style="padding-left: 4px;">Working papers/costings (Spreadsheet)</li>
+      </ul>
+    </div>
+
+    ${rejectionParagraph('If you have any feedback or questions for us, please contact us via <a href="mailto:customer.support@claimer.com" style="color: #946B00;">customer.support@claimer.com</a>')}
+
+    <p style="font-size: 15px; color: #3C3636; line-height: 1.6; margin: 24px 0 0;">Thanks,<br/>The Atlas Team</p>
+
+${emailFooter}`,
+    bodyPlaintext: `Hi {firstname},
+
+Sorry, your submission could not be processed for checks.
+
+WHAT HAPPENED
+**We only received supporting documents; checks require the R&D report too.** The supporting documents on their own aren't enough for us to check anything.
+
+HOW TO FIX THIS
+Reply to this email and attach your R&D report alongside any supporting documents in a single email:
+
+  * CT600 Tax Return (PDF)
+  * Tax Computations (PDF)
+  * Full Accounts (PDF)
+  * Working papers/costings (Spreadsheet)
+
+If you have any feedback or questions for us, please contact us via customer.support@claimer.com
+
+Thanks,
+The Atlas Team
+`,
   },
 
   // ── Personal emails (unchanged) ──

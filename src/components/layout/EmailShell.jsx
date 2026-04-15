@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 
 const folders = [
-  { label: 'Inbox', count: 4, path: '/email' },
+  { label: 'Inbox', count: 5, path: '/email' },
   { label: 'Sent Items', path: '/email/sent' },
   { label: 'Drafts' },
   { label: 'Deleted Items' },
