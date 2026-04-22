@@ -463,10 +463,6 @@ export const sentEmails = [
       { name: 'Nexagen_Mgmt_Accounts_FY2025.pdf', size: '3.2 MB', type: 'pdf' },
       { name: 'Tax_Computations_FY2025.xlsx', size: '890 KB', type: 'xlsx' },
     ],
-    body: `<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #333; max-width: 600px;">
-  <p>Hi,</p>
-  <p>Here are the additional files for Nexagen Ltd's R&D claim. Please run the full check.</p>
-  <p>Thanks</p>
-</div>`,
+    body: '',
   },
 ];
