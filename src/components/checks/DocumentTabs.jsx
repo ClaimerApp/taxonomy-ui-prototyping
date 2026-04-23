@@ -1,8 +1,26 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { cn } from '../../lib/cn'
 import { DocumentPreview } from './DocumentPreview'
+import { CT600Preview } from './CT600Preview'
+import { DocumentViewport } from './DocumentViewport'
+import { A4Page } from './A4Page'
+import { SpreadsheetWorkbook } from './SpreadsheetWorkbook'
+import { highlightStyles } from './highlightStyles'
 
-function PdfPages({ content }) {
+// Plain A4-styled report pages (used for Tax Computations)
+function TaxCompPages({ content, activeSubCheck }) {
+  const containerRef = useRef(null)
+  const highlightedFieldId =
+    activeSubCheck?.evidenceType === 'document_field' && activeSubCheck.evidence?.documentId === 'tax-comp'
+      ? activeSubCheck.evidence?.fieldId
+      : null
+
+  useEffect(() => {
+    if (!highlightedFieldId || !containerRef.current) return
+    const el = containerRef.current.querySelector(`[data-field-id="${highlightedFieldId}"]`)
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }, [highlightedFieldId])
+
   if (!content?.sections?.length) {
     return <p className="text-sm text-charcoal/50 py-8 text-center">No content available.</p>
   }
@@ -14,89 +32,48 @@ function PdfPages({ content }) {
     pages[p].push(section)
   }
   const sortedPages = Object.keys(pages).sort((a, b) => a - b)
+  const totalPages = sortedPages.length
+  const highlightResult = highlightedFieldId ? activeSubCheck?.result : null
 
   return (
-    <div className="space-y-6">
+    <div ref={containerRef} className="space-y-6">
       {sortedPages.map((pageNum) => (
-        <div
+        <A4Page
           key={pageNum}
-          className="bg-white rounded-xl shadow-sm border border-warmgrey/20 p-8 relative"
+          pageNum={pageNum}
+          totalPages={totalPages}
+          headerLeft={<span className="font-serif text-[11px] font-semibold text-charcoal/60">{content.title}</span>}
+          headerRight={<span className="text-[10px] text-charcoal/40">DRAFT — Subject to review</span>}
+          footerLeft={<span>{content.title}</span>}
+          footerRight={<span>Prepared by Sophie Clark, Tax Manager</span>}
         >
           {pages[pageNum].map((section) => (
-            <div key={section.id} className="mb-6 last:mb-0">
-              <h4 className="font-serif text-base font-semibold text-nearblack mb-4 pb-2 border-b border-warmgrey/15">
+            <section key={section.id} className="mb-7 last:mb-0">
+              <h4 className="font-serif text-[15px] font-semibold text-nearblack mb-4 pb-1.5 border-b border-warmgrey/30">
                 {section.heading}
               </h4>
               <div className="space-y-3">
-                {section.fields.map((field) => (
-                  <div key={field.id}>
-                    <div className="text-xs font-medium text-charcoal/50 mb-0.5">{field.label}</div>
-                    <div className="text-sm text-charcoal/80 whitespace-pre-wrap">{field.value}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-          <span className="absolute bottom-3 right-4 text-xs text-warmgrey">Page {pageNum}</span>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-function SpreadsheetTable({ data }) {
-  if (!data?.columns?.length) {
-    return <p className="text-sm text-charcoal/50 py-8 text-center">No data available.</p>
-  }
-
-  return (
-    <div className="bg-white rounded-xl border border-warmgrey/20 overflow-hidden">
-      <div className="overflow-x-auto">
-        <table className="min-w-[1200px] w-full border-collapse">
-          <thead>
-            <tr className="bg-warmgrey/10 border-b border-warmgrey/20">
-              <th className="px-2 py-2 w-8 text-xs text-warmgrey text-center border-r border-warmgrey/10">#</th>
-              {data.columns.map((col, i) => (
-                <th
-                  key={i}
-                  className="px-3 py-2 text-left text-xs font-medium text-charcoal/70 uppercase tracking-wide border-r border-warmgrey/10 last:border-r-0 whitespace-nowrap"
-                >
-                  {col}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {data.rows.map((row, ri) => {
-              const isLast = ri === data.rows.length - 1
-              const rowBg = isLast
-                ? 'bg-warmgrey/10'
-                : ri % 2 === 0
-                  ? 'bg-white'
-                  : 'bg-cream/50'
-
-              return (
-                <tr key={ri} className={cn(rowBg, 'border-b border-warmgrey/10')}>
-                  <td className="px-2 py-1.5 w-8 text-xs text-warmgrey text-center bg-warmgrey/5 border-r border-warmgrey/10">
-                    {ri + 1}
-                  </td>
-                  {row.map((cell, ci) => (
-                    <td
-                      key={ci}
+                {section.fields.map((field) => {
+                  const isHit = field.id === highlightedFieldId
+                  return (
+                    <div
+                      key={field.id}
+                      data-field-id={field.id}
                       className={cn(
-                        'px-3 py-1.5 text-sm border-r border-warmgrey/10 last:border-r-0 whitespace-nowrap',
-                        isLast ? 'font-semibold text-nearblack' : 'text-charcoal/80'
+                        'grid grid-cols-12 items-baseline gap-3',
+                        isHit && highlightResult && highlightStyles[highlightResult],
                       )}
                     >
-                      {cell}
-                    </td>
-                  ))}
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      </div>
+                      <div className="col-span-7 font-sans text-[11px] text-charcoal/70">{field.label}</div>
+                      <div className="col-span-5 font-serif text-[13px] text-nearblack text-right tabular-nums">{field.value}</div>
+                    </div>
+                  )
+                })}
+              </div>
+            </section>
+          ))}
+        </A4Page>
+      ))}
     </div>
   )
 }
@@ -204,19 +181,42 @@ export function DocumentTabs({
   ct600Content,
   taxCompContent,
   workingPapersData,
+  workingPapersWorkbook,
 }) {
+  const workbook = workingPapersWorkbook || workingPapersData
+
+  // Auto-switch tab when an active sub-check targets a specific document
+  const targetDocId =
+    activeSubCheck?.evidenceType === 'document_field' ? activeSubCheck.evidence?.documentId : null
+  useEffect(() => {
+    if (targetDocId && targetDocId !== activeTab) onTabChange(targetDocId)
+
+  }, [targetDocId])
+
   return (
     <div className="flex flex-col h-full min-w-0">
       <TabBar tabs={tabs} activeTab={activeTab} onTabChange={onTabChange} />
 
       {/* Tab content */}
-      <div className="flex-1 min-h-0 overflow-y-auto pt-4">
+      <div className="flex-1 min-h-0">
         {activeTab === 'rnd-report' && document && (
-          <DocumentPreview document={document} activeSubCheck={activeSubCheck} />
+          <DocumentViewport>
+            <DocumentPreview document={document} activeSubCheck={activeSubCheck} />
+          </DocumentViewport>
         )}
-        {activeTab === 'ct600' && <PdfPages content={ct600Content} />}
-        {activeTab === 'tax-comp' && <PdfPages content={taxCompContent} />}
-        {activeTab === 'working-papers' && <SpreadsheetTable data={workingPapersData} />}
+        {activeTab === 'ct600' && (
+          <DocumentViewport>
+            <CT600Preview content={ct600Content} activeSubCheck={activeSubCheck} />
+          </DocumentViewport>
+        )}
+        {activeTab === 'tax-comp' && (
+          <DocumentViewport>
+            <TaxCompPages content={taxCompContent} activeSubCheck={activeSubCheck} />
+          </DocumentViewport>
+        )}
+        {activeTab === 'working-papers' && (
+          <SpreadsheetWorkbook workbook={workbook} activeSubCheck={activeSubCheck} />
+        )}
       </div>
     </div>
   )

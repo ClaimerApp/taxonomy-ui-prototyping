@@ -290,6 +290,142 @@ Companies in receipt of subsidies should consider whether the RDEC scheme offers
     ],
   },
 
+  'fa2024-eris': {
+    id: 'fa2024-eris',
+    type: 'legislation',
+    title: 'Finance Act 2024 — Enhanced R&D Intensive Support (ERIS)',
+    shortTitle: 'FA 2024 — ERIS',
+    sourceUrl: 'https://www.legislation.gov.uk/ukpga/2024/3/contents',
+    highlightParagraphs: [0, 2],
+    text: `Finance Act 2024 introduced the merged R&D expenditure credit scheme and, alongside it, Enhanced R&D Intensive Support (ERIS) for loss-making SMEs whose qualifying R&D expenditure constitutes a high proportion of their total expenditure.
+
+ERIS is available only to companies that meet the SME thresholds (fewer than 500 employees, and either turnover not exceeding €100m or balance sheet total not exceeding €86m), are loss-making for corporation tax purposes, and whose qualifying R&D expenditure is at least 30% of their total expenditure for the accounting period.
+
+Loss-making for CT purposes is distinct from an accounting loss. A company can report an accounting profit but still be loss-making for CT purposes after adjustments (e.g. enhanced R&D deduction, capital allowances, losses brought forward). The test is applied to the tax-adjusted trading position.
+
+ERIS applies to accounting periods beginning on or after 1 April 2024. For periods that straddle this date, the relief must be apportioned.
+
+A company that exceeds the SME thresholds, or becomes profitable for CT purposes, must claim under the merged RDEC scheme instead. There is no hybrid.`,
+    exampleQueries: [
+      'What are the conditions for ERIS?',
+      'When did ERIS come into effect?',
+      'What does "loss-making for CT purposes" mean?',
+    ],
+    cannedResponses: [
+      {
+        query: 'What are the conditions for ERIS?',
+        response: 'ERIS requires SME status, loss-making status for CT purposes, and qualifying R&D expenditure of at least 30% of total expenditure in the accounting period.',
+      },
+      {
+        query: 'When did ERIS come into effect?',
+        response: 'For accounting periods beginning on or after 1 April 2024. Periods straddling this date must be apportioned.',
+      },
+    ],
+  },
+
+  'dsit-guidelines': {
+    id: 'dsit-guidelines',
+    type: 'hmrc_guidance',
+    title: 'DSIT Guidelines on the Meaning of R&D for Tax Purposes',
+    shortTitle: 'DSIT Guidelines',
+    sourceUrl: 'https://www.gov.uk/government/publications/guidelines-on-the-meaning-of-research-and-development-for-tax-purposes',
+    highlightParagraphs: [0, 4],
+    text: `The DSIT Guidelines (formerly BEIS Guidelines) are the authoritative source, cited by CTA 2009 s1006 ITA 2007, on what constitutes qualifying R&D for tax purposes. They sit at the heart of every R&D claim.
+
+Paragraph 9 of the Guidelines sets out that an advance in science or technology means an advance in the overall knowledge or capability in a field — not a company's own state of knowledge. The work must seek to extend what is known or achievable in the field as a whole.
+
+Paragraph 9a requires that the project demonstrate new or extended knowledge or capability in the technological components being used. Paragraph 9c requires evidence of scientific or technological change in the underlying build.
+
+Paragraph 13 defines scientific or technological uncertainty: uncertainty exists when knowledge of whether something is scientifically possible or technologically feasible, or how to achieve it in practice, is not readily available or deducible by a competent professional working in the field.
+
+Paragraph 22 requires that the baseline for the project be specific — stating the approaches, technologies, or methods that existed at the start against which the advance is to be measured. Vague assertions ("no existing solutions") are insufficient.
+
+Paragraphs 27-28 cover qualifying indirect activities (QIA). These include activities such as scientific and technical information services, indirect supporting activities, and training required to support R&D.
+
+A common failure mode identified by HMRC in claim scrutiny is narratives that describe commercial product development rather than technological advance. The Guidelines specifically call out that developing a new product is not itself R&D — R&D is the resolution of technological uncertainty in how to produce that product.`,
+    exampleQueries: [
+      'What paragraph of the DSIT Guidelines defines the baseline?',
+      'How are QIAs treated under DSIT Guidelines?',
+      'What is the test for scientific or technological uncertainty?',
+    ],
+    cannedResponses: [
+      {
+        query: 'What paragraph of the DSIT Guidelines defines the baseline?',
+        response: 'Paragraph 22. It requires the baseline to be specific — stating the approaches, technologies, or methods that existed at the start of the project.',
+      },
+      {
+        query: 'How are QIAs treated under DSIT Guidelines?',
+        response: 'Paragraphs 27-28 define QIAs. Scientific and technical information services, indirect supporting activities, and training required for R&D all qualify as QIAs and can be included in the claim.',
+      },
+    ],
+  },
+
+  cird182000: {
+    id: 'cird182000',
+    type: 'hmrc_guidance',
+    title: 'CIRD182000 — Additional Information Form (AIF) requirements',
+    shortTitle: 'CIRD182000',
+    sourceUrl: 'https://www.gov.uk/hmrc-internal-manuals/corporate-intangibles-research-and-development/cird182000',
+    highlightParagraphs: [0, 2],
+    text: `From 8 August 2023 all R&D claims must be supported by an Additional Information Form (AIF) submitted in advance of, or at the same time as, the CT600. Claims without an AIF are invalid and will be rejected.
+
+The AIF requires, per project, a technical narrative covering: the baseline, the advance sought, the scientific or technological uncertainties, the work undertaken to resolve those uncertainties, and the extent to which the competent professional view was that the solution was not readily deducible.
+
+For claims involving 1-3 projects, a technical narrative must be provided for every project claimed. For claims with 4-10 projects, narratives covering at least 50% of the total qualifying expenditure are required, and these narratives must be for the largest projects by expenditure. For claims with more than 10 projects, narratives covering at least 10 projects and at least 50% of the qualifying expenditure are required, again starting with the largest.
+
+Each narrative must address each of the five sections above. Narratives that omit any of these sections do not meet the AIF requirements and the claim may be rejected or enquired into.
+
+The AIF also requires disclosure of all scheme types claimed under (SME, RDEC, merged, ERIS), the accounting period covered, the identity of any agent preparing the claim, and contact details for a named officer of the company.`,
+    exampleQueries: [
+      'How many technical narratives does the AIF require?',
+      'What sections must each narrative contain?',
+      'When did the AIF requirement start?',
+    ],
+    cannedResponses: [
+      {
+        query: 'How many technical narratives does the AIF require?',
+        response: 'For 1-3 projects: narratives for all. For 4-10 projects: narratives covering at least 50% of qualifying expenditure, starting with the largest. For 10+ projects: at least 10 narratives and at least 50% of expenditure, starting with the largest.',
+      },
+      {
+        query: 'What sections must each narrative contain?',
+        response: 'Baseline, advance sought, scientific/technological uncertainties, work undertaken to resolve the uncertainties, and the competent-professional view that the solution was not readily deducible.',
+      },
+    ],
+  },
+
+  'sme-definition-eu': {
+    id: 'sme-definition-eu',
+    type: 'legislation',
+    title: 'Commission Recommendation 2003/361/EC — SME definition',
+    shortTitle: 'Rec 2003/361/EC',
+    sourceUrl: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32003H0361',
+    highlightParagraphs: [0, 2],
+    text: `The EU SME definition, retained in UK law for R&D relief purposes, sets the thresholds for small and medium-sized enterprises. An SME is an enterprise with fewer than 500 employees and either annual turnover not exceeding €100 million or annual balance sheet total not exceeding €86 million (UK R&D doubles the EU baseline thresholds of 250 employees / €50m / €43m).
+
+The test is applied at the group level. Where the company is part of a larger structure, the figures of all linked and partner enterprises must be aggregated.
+
+A linked enterprise is one where a majority of the capital or voting rights is held, or where there is dominant influence. A partner enterprise is one where 25% or more (but less than 50%) of capital or voting rights is held. Both relationships aggregate data into the SME test.
+
+The test is applied on the basis of the last approved accounts. Where a company has been in existence for less than two approved periods, estimates based on a bona fide forecast may be used.
+
+Status changes only take effect when the thresholds are exceeded (or fallen below) for two consecutive periods. This prevents single-year fluctuations from causing a loss of SME status.`,
+    exampleQueries: [
+      'What are the UK R&D SME thresholds?',
+      'When does SME status change?',
+      'How is the group level defined?',
+    ],
+    cannedResponses: [
+      {
+        query: 'What are the UK R&D SME thresholds?',
+        response: 'Fewer than 500 employees, and either annual turnover ≤ €100m or balance sheet total ≤ €86m. Tested at group level.',
+      },
+      {
+        query: 'When does SME status change?',
+        response: 'Only when thresholds are exceeded (or fallen below) for two consecutive periods. Single-year fluctuations do not trigger a change.',
+      },
+    ],
+  },
+
   cird191000: {
     id: 'cird191000',
     type: 'hmrc_guidance',

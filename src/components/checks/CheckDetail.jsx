@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { fileReviews, checkCategories, timeAgo, legislationRefs } from '../../data/checks'
-import { documentContent, getReviewDocuments, ct600Content, taxCompContent, workingPapersData } from '../../data/document-content'
+import { documentContent, getReviewDocuments, ct600Content, taxCompContent, workingPapersWorkbook } from '../../data/document-content'
 import { entities } from '../../data/entities'
 import { Badge } from '../ui/Badge'
 import { cn } from '../../lib/cn'
@@ -261,7 +261,9 @@ export default function CheckDetail() {
                                         onClick={() => {
                                           const next = activeSubCheck?.id === sc.id ? null : sc
                                           setActiveSubCheck(next)
-                                          if (next?.evidenceType === 'document_field') setActiveDocTab('rnd-report')
+                                          if (next?.evidenceType === 'document_field') {
+                                            setActiveDocTab(next.evidence?.documentId || 'rnd-report')
+                                          }
                                         }}
                                       />
                                     ))}
@@ -343,7 +345,7 @@ export default function CheckDetail() {
             onTabChange={setActiveDocTab}
             ct600Content={ct600Content}
             taxCompContent={taxCompContent}
-            workingPapersData={workingPapersData}
+            workingPapersWorkbook={workingPapersWorkbook}
           />
         </div>
       </div>

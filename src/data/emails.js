@@ -39,6 +39,16 @@ const checkPassLink = (name, href) => `<a href="${href}" style="display: block; 
         </div>
       </a>`
 
+const checkWarningLink = (name, href, summary, fix) => `<a href="${href}" style="display: block; background: #FFFFFF; border: 1px solid #fde68a; border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; text-decoration: none; color: inherit;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+          <span style="color: #d97706; font-size: 15px;">⚠</span>
+          <span style="font-size: 13px; font-weight: 500; color: #1A1412; flex: 1;">${name}</span>
+          <span style="background: #ffedd5; color: #9a3412; font-size: 11px; padding: 2px 8px; border-radius: 99px; font-weight: 600;">warning</span>
+        </div>
+        <div style="font-size: 12px; color: #6B6058; padding-left: 23px; margin-bottom: 6px;">${summary}</div>
+        <div style="background: #FFFBF5; border: 1px solid #E8E0D4; border-radius: 8px; padding: 8px 12px; font-size: 12px; margin-left: 23px; color: #6B6058;">Suggested fix: ${fix}</div>
+      </a>`
+
 // Rejection email building blocks
 const rejectionParagraph = (text) => `<p style="font-size: 15px; color: #3C3636; line-height: 1.6; margin: 0 0 16px;">${text}</p>`
 
@@ -61,13 +71,13 @@ export const emails = [
     id: 'email-check-full',
     from: { name: 'Atlas Reviews', email: 'reviews@atlas.ai', initials: 'AT' },
     to: 'you@firm.co.uk',
-    subject: 'Nexagen Ltd — Full R&D Report Review: 2 issues, correction needed',
+    subject: 'Nexagen Ltd — Full R&D Report Review: 4 issues, correction needed',
     date: '2026-03-08T11:15:00Z',
     read: false,
     starred: false,
     isAtlas: true,
     type: 'check',
-    preview: 'Full review complete across 4 files. 2 critical issues found: company number mismatch (auto-corrected), expenditure exceeds total...',
+    preview: 'Full review complete across 4 files. 2 critical (company number, expenditure), 4 warnings (trade link, tech baseline, commercial framing, workbook reconciliation)...',
     body: `${emailHeader('Full Review Report')}
 
     ${fileMeta}
@@ -78,11 +88,11 @@ export const emails = [
 
     <div style="display: flex; gap: 12px; margin-bottom: 24px;">
       <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 10px 16px; text-align: center; flex: 1;">
-        <div style="font-size: 20px; font-weight: 700; color: #16a34a;">7</div>
+        <div style="font-size: 20px; font-weight: 700; color: #16a34a;">17</div>
         <div style="font-size: 11px; color: #6B6058;">Passed</div>
       </div>
       <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; padding: 10px 16px; text-align: center; flex: 1;">
-        <div style="font-size: 20px; font-weight: 700; color: #d97706;">1</div>
+        <div style="font-size: 20px; font-weight: 700; color: #d97706;">4</div>
         <div style="font-size: 11px; color: #6B6058;">Warning</div>
       </div>
       <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 10px 16px; text-align: center; flex: 1;">
@@ -142,6 +152,48 @@ export const emails = [
 
       ${checkPassLink('Expenditure Categories Within Bounds', '#/app/checks/rev-1')}
       ${checkPassLink('No Public Grants/Subsidies Detected', '#/app/checks/rev-1')}
+      ${checkPassLink('Accounting Period Scheme Eligibility', '#/app/checks/rev-1')}
+      ${checkPassLink('Expenditure Categories Eligible for AP', '#/app/checks/rev-1')}
+      ${checkPassLink('SME Status (Headcount, Turnover, Assets)', '#/app/checks/rev-1')}
+      ${checkPassLink('Loss-Making Status (ERIS)', '#/app/checks/rev-1')}
+    </div>
+
+    <div style="margin-bottom: 24px;">
+      <div style="font-size: 13px; font-weight: 600; color: #9A8E7E; letter-spacing: 1px; margin-bottom: 12px;">TECHNICAL NARRATIVE</div>
+
+      ${checkPassLink('Technical Narrative Present & Complete', '#/app/checks/rev-1')}
+
+      ${checkWarningLink(
+        'Scientific or Technological Baseline Stated',
+        '#/app/checks/rev-1',
+        "Project 3 (AI Literature Review) lacks a specific technological baseline.",
+        "Strengthen the Project 3 baseline with named existing tools and the specific limitation being exceeded."
+      )}
+
+      ${checkWarningLink(
+        'Commercial Development Framed as R&amp;D',
+        '#/app/checks/rev-1',
+        "Project 3 reads as commercial productivity tooling rather than a technological advance.",
+        "Reframe Project 3 around the specific NLP research problem, not internal productivity gains."
+      )}
+
+      ${checkPassLink('Output vs Underlying Technology Focus', '#/app/checks/rev-1')}
+      ${checkPassLink('Evidenced Separation of R&D from Non-R&D', '#/app/checks/rev-1')}
+    </div>
+
+    <div style="margin-bottom: 24px;">
+      <div style="font-size: 13px; font-weight: 600; color: #9A8E7E; letter-spacing: 1px; margin-bottom: 12px;">CROSS-REFERENCE &amp; RECONCILIATION</div>
+
+      ${checkWarningLink(
+        'Qualifying expenditure reconciles across report, tax comp, working papers',
+        '#/app/checks/rev-1',
+        'Report and tax computation agree at £770,438.50; working papers Summary total shows a £32k shortfall — workbook likely out of date.',
+        'Update working papers Summary sheet to tie to the current R&D report total, or re-issue the report from the latest workbook figures.'
+      )}
+
+      ${checkPassLink('UTR on R&D report matches CT600', '#/app/checks/rev-1')}
+      ${checkPassLink('Accounting period matches across R&D report, CT600 & tax comp', '#/app/checks/rev-1')}
+      ${checkPassLink('Trading loss reconciles between CT600 & tax comp', '#/app/checks/rev-1')}
     </div>
 
     <div style="text-align: center; padding: 8px 0 16px;">
